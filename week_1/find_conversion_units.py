@@ -10,10 +10,10 @@ K_d = K_p * P_u / 8.0
 
 
 def setup():
-    interface=brickpi.Interface()
+    interface = brickpi.Interface()
     interface.initialize()
 
-    motors = [0,1]
+    motors = [0, 1]
 
     interface.motorEnable(motors[0])
     interface.motorEnable(motors[1])
@@ -21,7 +21,7 @@ def setup():
     motorParams = interface.MotorAngleControllerParameters()
     motorParams.maxRotationAcceleration = 6.0
     motorParams.maxRotationSpeed = 12.0
-    motorParams.feedForwardGain = 255/20.0
+    motorParams.feedForwardGain = 255 / 20.0
     motorParams.minPWM = 18.0
     motorParams.pidParameters.minOutput = -255
     motorParams.pidParameters.maxOutput = 255
@@ -29,21 +29,21 @@ def setup():
     motorParams.pidParameters.k_i = K_i
     motorParams.pidParameters.k_d = K_d
 
-    interface.setMotorAngleControllerParameters(motors[0],motorParams)
-    interface.setMotorAngleControllerParameters(motors[1],motorParams)
+    interface.setMotorAngleControllerParameters(motors[0], motorParams)
+    interface.setMotorAngleControllerParameters(motors[1], motorParams)
 
     return interface
 
 
 def move_by_angle(interface, motors, angle):
-	interface.increaseMotorAngleReferences(motors,[angle,angle])
+    interface.increaseMotorAngleReferences(motors, [angle, angle])
 
 
 def turn_by_angle(interface, motors, angle):
-	interface.increaseMotorAngleReferences(motors,[angle,-angle])
+    interface.increaseMotorAngleReferences(motors, [angle, -angle])
 
 
-if __name__=='__main__':
+if __name__ == '__main__':
 
     interface = setup()
 
@@ -56,13 +56,12 @@ if __name__=='__main__':
         else:
             move_by_angle(interface, motors, angle)
 
-        while not interface.motorAngleReferencesReached(motors) :
+        while not interface.motorAngleReferencesReached(motors):
             motorAngles = interface.getMotorAngles(motors)
-            if motorAngles :
+            if motorAngles:
                 print "Motor angles: ", motorAngles[0][0], ", ", motorAngles[1][0]
             time.sleep(0.1)
 
         print "Destination reached!"
-	
 
     interface.terminate()

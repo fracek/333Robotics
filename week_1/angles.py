@@ -1,7 +1,8 @@
 import csv
 import matplotlib.pyplot as plt
 
-LOG_BASE_NAME='k_p_log/k_p_{}'
+LOG_BASE_NAME = 'k_p_log/k_p_{}'
+
 
 def read_log(path):
     with open(path, 'rb') as infile:
@@ -13,8 +14,10 @@ def read_log(path):
                  'ref_a1': float(row[3]),
                  'a1': float(row[4])} for row in tsvin]
 
+
 def angle_error(ref, act):
     return [x - y for (x, y) in zip(ref, act)]
+
 
 def show_plot(data, figname):
     # TODO: start graphs from 0, i.e. ts -= ts[0]
@@ -29,7 +32,7 @@ def show_plot(data, figname):
     # Left plot, motor 0
     ax1 = fig.add_subplot(2, 2, 1)
     pref_a0, = ax1.plot(ts, ref_a0, 'b-')
-    p_a0, = ax1.plot(ts, a0, 'r-');
+    p_a0, = ax1.plot(ts, a0, 'r-')
 
     ax1.set_title('Motor 0')
     ax1.legend([pref_a0, p_a0], ['Reference', 'Actual'], loc=4)
@@ -51,9 +54,9 @@ def show_plot(data, figname):
     ax4.set_title('Error Motor 1')
 
     fig.savefig(figname)
-    #plt.show()
+    # plt.show()
 
-if __name__=='__main__':
+if __name__ == '__main__':
     k_ps = [x * 50.0 for x in range(1, 19)]
     for k_p in k_ps:
         data = read_log(LOG_BASE_NAME.format(int(k_p * 100)))
