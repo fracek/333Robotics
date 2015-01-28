@@ -32,7 +32,7 @@ def setup():
     interface.setMotorAngleControllerParameters(motors[0], motorParams)
     interface.setMotorAngleControllerParameters(motors[1], motorParams)
 
-    return interface
+    return interface, motors
 
 
 def move_by_angle(interface, motors, angle):
@@ -45,7 +45,7 @@ def turn_by_angle(interface, motors, angle):
 
 if __name__ == '__main__':
 
-    interface = setup()
+    interface, motors = setup()
 
     while True:
         choice = raw_input('T = turn; M = move: ')

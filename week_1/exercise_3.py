@@ -3,6 +3,8 @@ import time
 
 TAU_TO_ANGLE = 18.0
 
+METER_TO_ANGLE = 3.14 / 10.0
+
 K_u = 750.0
 P_u = 0.5
 
@@ -34,7 +36,7 @@ def setup():
     interface.setMotorAngleControllerParameters(motors[0], motorParams)
     interface.setMotorAngleControllerParameters(motors[1], motorParams)
 
-    return interface
+    return interface, motors
 
 
 def angle_for_turn(turn_angle):
@@ -56,7 +58,7 @@ def turn_by_angle(interface, motors, angle):
 
 if __name__ == '__main__':
 
-    interface = setup()
+    interface, motors = setup()
 
     while True:
         choice = raw_input('T = turn; M = move: ')
