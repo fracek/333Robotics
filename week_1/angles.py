@@ -17,6 +17,7 @@ def angle_error(ref, act):
     return [x - y for (x, y) in zip(ref, act)]
 
 def show_plot(data, figname):
+    # TODO: start graphs from 0, i.e. ts -= ts[0]
     ts = [e['t'] for e in data]
     ref_a0 = [e['ref_a0'] for e in data]
     a0 = [e['a0'] for e in data]
