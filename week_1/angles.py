@@ -19,7 +19,7 @@ def angle_error(ref, act):
     return [x - y for (x, y) in zip(ref, act)]
 
 
-def show_plot(data, figname):
+def show_plot(data, figname, k_p):
     ts = [e['t'] - data[0]['t'] for e in data]
     ref_a0 = [e['ref_a0'] for e in data]
     a0 = [e['a0'] for e in data]
@@ -63,12 +63,13 @@ def show_plot(data, figname):
     ax5.grid()
 
     fig.tight_layout()
+    fig.suptitle('k_p=%s' % k_p)
 
     fig.savefig(figname)
-    plt.show()
+    #plt.show()
 
 if __name__ == '__main__':
     k_ps = [x * 50.0 for x in range(1, 19)]
     for k_p in k_ps:
         data = read_log(LOG_BASE_NAME.format(int(k_p * 100)))
-        show_plot(data, 'generated/k_p_{}.eps'.format(int(k_p * 100)))
+        show_plot(data, 'generated/k_p_{}.eps'.format(int(k_p * 100)), k_p)
