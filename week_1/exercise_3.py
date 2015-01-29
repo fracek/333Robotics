@@ -1,9 +1,9 @@
 import rocommon
 import time
 
-TAU_TO_ANGLE = 18.0
+TAU_TO_ANGLE = 17.85
 
-METER_TO_ANGLE = 3.14 / 10.0
+METER_TO_ANGLE = 20. / 55
 
 
 def angle_for_turn(turn_angle):
