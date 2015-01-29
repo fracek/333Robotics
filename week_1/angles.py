@@ -26,6 +26,9 @@ def show_plot(data, figname):
     ref_a1 = [e['ref_a1'] for e in data]
     a1 = [e['a1'] for e in data]
 
+    initial_diff = data[0]['a0'] - data[0]['a1']
+    diffs = [e['a0'] - e['a1'] - initial_diff for e in data]
+
     fig = plt.figure()
 
     # Left plot, motor 0
@@ -55,8 +58,8 @@ def show_plot(data, figname):
     ax4.grid()
 
     ax5 = fig.add_subplot(3, 1, 2)
-    ax5.plot(ts, angle_error(a0, a1))
-    ax5.set_title('Difference between motors')
+    ax5.plot(ts, diffs)
+    ax5.set_title('Angle 0 - Angle 1')
     ax5.grid()
 
     fig.tight_layout()
