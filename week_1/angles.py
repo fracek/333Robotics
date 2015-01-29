@@ -69,7 +69,7 @@ def show_plot(data, figname, k_p):
     #plt.show()
 
 if __name__ == '__main__':
-    k_ps = [x * 50.0 for x in range(1, 19)]
+    k_ps = [x * 50.0 for x in range(2, 19)]
     for k_p in k_ps:
         data = read_log(LOG_BASE_NAME.format(int(k_p * 100)))
         show_plot(data, 'generated/k_p_{}.eps'.format(int(k_p * 100)), k_p)
