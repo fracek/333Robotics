@@ -1,7 +1,7 @@
 import csv
 import matplotlib.pyplot as plt
 
-LOG_BASE_NAME = 'k_p_log/k_p_{}'
+LOG_BASE_NAME = 'data/k_p_{}'
 
 
 def read_log(path):
@@ -20,8 +20,7 @@ def angle_error(ref, act):
 
 
 def show_plot(data, figname):
-    # TODO: start graphs from 0, i.e. ts -= ts[0]
-    ts = [e['t'] for e in data]
+    ts = [e['t'] - data[0]['t'] for e in data]
     ref_a0 = [e['ref_a0'] for e in data]
     a0 = [e['a0'] for e in data]
     ref_a1 = [e['ref_a1'] for e in data]
@@ -40,6 +39,7 @@ def show_plot(data, figname):
     ax2 = fig.add_subplot(2, 2, 2)
     ax2.plot(ts, angle_error(ref_a0, a0))
     ax2.set_title('Error Motor 0')
+    ax2.grid()
 
     # Right plot, motor 1
     ax3 = fig.add_subplot(2, 2, 3)
@@ -52,12 +52,13 @@ def show_plot(data, figname):
     ax4 = fig.add_subplot(2, 2, 4)
     ax4.plot(ts, angle_error(ref_a1, a1))
     ax4.set_title('Error Motor 1')
+    ax4.grid()
 
     fig.savefig(figname)
-    # plt.show()
+    plt.show()
 
 if __name__ == '__main__':
     k_ps = [x * 50.0 for x in range(1, 19)]
     for k_p in k_ps:
         data = read_log(LOG_BASE_NAME.format(int(k_p * 100)))
-        show_plot(data, 'k_p_log_out/k_p_{}.eps'.format(int(k_p * 100)))
+        show_plot(data, 'generated/k_p_{}.eps'.format(int(k_p * 100)))
