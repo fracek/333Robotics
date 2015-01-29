@@ -12,5 +12,5 @@ data = np.array([[0, 2],
                  [2, 0],
                  [1, 1]]).T
 
-
-print np.cov(data, bias=1)
+if __name__ == '__main__':
+    print np.cov(data, bias=1)
