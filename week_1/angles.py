@@ -29,30 +29,37 @@ def show_plot(data, figname):
     fig = plt.figure()
 
     # Left plot, motor 0
-    ax1 = fig.add_subplot(2, 2, 1)
+    ax1 = fig.add_subplot(3, 2, 1)
     pref_a0, = ax1.plot(ts, ref_a0, 'b-')
     p_a0, = ax1.plot(ts, a0, 'r-')
 
     ax1.set_title('Motor 0')
     ax1.legend([pref_a0, p_a0], ['Reference', 'Actual'], loc=4)
 
-    ax2 = fig.add_subplot(2, 2, 2)
+    ax2 = fig.add_subplot(3, 2, 2)
     ax2.plot(ts, angle_error(ref_a0, a0))
     ax2.set_title('Error Motor 0')
     ax2.grid()
 
     # Right plot, motor 1
-    ax3 = fig.add_subplot(2, 2, 3)
+    ax3 = fig.add_subplot(3, 2, 5)
     pref_a1, = ax3.plot(ts, ref_a1, 'b-')
     p_a1, = ax3.plot(ts, a1, 'r-')
 
     ax3.set_title('Motor 1')
     ax3.legend([pref_a1, p_a1], ['Reference', 'Actual'], loc=4)
 
-    ax4 = fig.add_subplot(2, 2, 4)
+    ax4 = fig.add_subplot(3, 2, 6)
     ax4.plot(ts, angle_error(ref_a1, a1))
     ax4.set_title('Error Motor 1')
     ax4.grid()
+
+    ax5 = fig.add_subplot(3, 1, 2)
+    ax5.plot(ts, angle_error(a0, a1))
+    ax5.set_title('Difference between motors')
+    ax5.grid()
+
+    fig.tight_layout()
 
     fig.savefig(figname)
     plt.show()
