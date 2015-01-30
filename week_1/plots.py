@@ -1,7 +1,8 @@
 import csv
 import matplotlib.pyplot as plt
 
-LOG_BASE_NAME = 'data/k_p_{}'
+LOG_BASE_PATH = 'data/k_p_{}'
+TUNED_DATA_PATH = 'data/tuned_data'
 
 
 def read_log(path):
@@ -19,7 +20,7 @@ def angle_error(ref, act):
     return [x - y for (x, y) in zip(ref, act)]
 
 
-def show_plot(data, figname, k_p):
+def generate_plot(data, figname, title):
     ts = [e['t'] - data[0]['t'] for e in data]
     ref_a0 = [e['ref_a0'] for e in data]
     a0 = [e['a0'] for e in data]
@@ -63,13 +64,19 @@ def show_plot(data, figname, k_p):
     ax5.grid()
 
     fig.tight_layout()
-    fig.suptitle('k_p=%s' % k_p)
+    fig.suptitle(title)
 
     fig.savefig(figname)
     #plt.show()
 
+
 if __name__ == '__main__':
     k_ps = [x * 50.0 for x in range(2, 19)]
     for k_p in k_ps:
-        data = read_log(LOG_BASE_NAME.format(int(k_p * 100)))
-        show_plot(data, 'generated/k_p_{}.eps'.format(int(k_p * 100)), k_p)
+        data = read_log(LOG_BASE_PATH.format(int(k_p * 100)))
+        generate_plot(data, 'generated/k_p_{}.eps'.format(int(k_p * 100)), 'K_p = {:.2f}'.format(k_p))
+
+    # generate graphs for tuned data
+    tuned_data = read_log(TUNED_DATA_PATH)
+    generate_plot(tuned_data, 'generated/tuned_data.eps', 'Tuned')
+
