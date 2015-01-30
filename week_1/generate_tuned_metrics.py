@@ -18,5 +18,6 @@ if __name__ == '__main__':
     # collect more data after reaching reference angle
     time.sleep(5.0)
 
+
     interface.stopLogging()
     interface.terminate()
