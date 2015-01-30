@@ -38,6 +38,8 @@ if __name__ == '__main__':
     interface = brickpi.Interface()
     interface.initialize()
 
+    motors = [0, 1]
+
     interface.motorEnable(motors[0])
     interface.motorEnable(motors[1])
 
