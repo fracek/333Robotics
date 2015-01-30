@@ -1,16 +1,9 @@
 import numpy as np
 
-# (x, y) coordinates of final positions
-data = np.array([[0, 2],
-                 [1, 1],
-                 [2, 0],
-                 [1, 1],
-                 [2, 0],
-                 [1, 1],
-                 [2, 0],
-                 [1, 1],
-                 [2, 0],
-                 [1, 1]]).T
 
+DATA_PATH = "data/square_data.csv"
+
+# (x, y) coordinates of final positions
 if __name__ == '__main__':
-    print np.cov(data, bias=1)
+    data = np.genfromtxt(DATA_PATH, delimiter=",")
+    print np.cov(data.T, bias=1)
