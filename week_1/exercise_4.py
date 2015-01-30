@@ -1,6 +1,6 @@
 import rocommon
 
-TAU_TO_ANGLE = 17.85
+TAU_TO_ANGLE = 17.95
 
 METER_TO_ANGLE = 20. / 55
 
@@ -32,7 +32,7 @@ def move_and_turn(interface, motors):
     move_by_angle(interface, motors, angle_for_distance(40))
     wait_until_done(interface, motors)
 
-    turn_by_angle(interface, motors, angle_for_turn(90))
+    turn_by_angle(interface, motors, angle_for_turn(-90))
     wait_until_done(interface, motors)
 
 

@@ -1,7 +1,7 @@
 import rocommon
 import time
 
-TAU_TO_ANGLE = 17.85
+TAU_TO_ANGLE = 17.95
 
 METER_TO_ANGLE = 20. / 55
 
