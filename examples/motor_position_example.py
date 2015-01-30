@@ -16,12 +16,14 @@ motorParams.feedForwardGain = 255/20.0
 motorParams.minPWM = 18.0
 motorParams.pidParameters.minOutput = -255
 motorParams.pidParameters.maxOutput = 255
-motorParams.pidParameters.k_p = 100.0
-motorParams.pidParameters.k_i = 0.0
-motorParams.pidParameters.k_d = 0.0
+motorParams.pidParameters.k_p = 650.0*0.6
+motorParams.pidParameters.k_i = 2*motorParams.pidParameters.k_p / 0.36
+motorParams.pidParameters.k_d = motorParams.pidParameters.k_p * 0.36 / 8
 
 interface.setMotorAngleControllerParameters(motors[0],motorParams)
 interface.setMotorAngleControllerParameters(motors[1],motorParams)
+
+logPath = '~/Documents/log'
 
 try:
 	while True:
