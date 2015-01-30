@@ -79,4 +79,3 @@ if __name__ == '__main__':
     # generate graphs for tuned data
     tuned_data = read_log(TUNED_DATA_PATH)
     generate_plot(tuned_data, 'generated/tuned_data.eps', 'Tuned')
-

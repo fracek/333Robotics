@@ -1,34 +1,20 @@
 import rocommon
-import time
-
-
-def move_by_angle(interface, motors, angle):
-    interface.increaseMotorAngleReferences(motors, [angle, angle])
-
-
-def turn_by_angle(interface, motors, angle):
-    interface.increaseMotorAngleReferences(motors, [angle, -angle])
 
 
 if __name__ == '__main__':
 
-    interface, motors = rocommon.setup()
+    robot = rocommon.Robot()
 
-    while True:
-        choice = raw_input('T = turn; M = move: ')
-        angle = float(input("Angle: "))
+    try:
+        while True:
+            choice = raw_input('T = turn; M = move: ')
+            unit = float(input("Unit (real): "))
 
-        if choice == 'T':
-            turn_by_angle(interface, motors, angle)
-        else:
-            move_by_angle(interface, motors, angle)
+            if choice == 'T' or choice == 't':
+                robot._turn_by_angle(unit)
+            else:
+                robot._move_by_angle(unit)
 
-        while not interface.motorAngleReferencesReached(motors):
-            motorAngles = interface.getMotorAngles(motors)
-            if motorAngles:
-                print "Motor angles: ", motorAngles[0][0], ", ", motorAngles[1][0]
-            time.sleep(0.1)
-
-        print "Destination reached!"
-
-    interface.terminate()
+            robot.WaitUntilDone()
+    except KeyboardInterrupt:
+        robot.Implode()
