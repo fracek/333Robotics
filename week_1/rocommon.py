@@ -1,5 +1,13 @@
 import brickpi
 
+# Wrap func to wait for angle references to be reached before returning
+def wait_references_reached(func):
+    def wrapper(*args, **kwargs):
+        self = args[0]
+        ret = func(*args, **kwargs)
+        self.WaitUntilDone()
+        return ret
+    return wrapper
 
 class Robot:
     K_u = [650.0, 650.0]
@@ -41,9 +49,11 @@ class Robot:
     def _angle_for_distance(self, distance):
         return Robot.METER_TO_ANGLE * distance
 
+    @wait_references_reached
     def _move_by_angle(self, angle):
         self.interface.increaseMotorAngleReferences(self.motors, [angle, angle])
 
+    @wait_references_reached
     def _turn_by_angle(self, angle):
         self.interface.increaseMotorAngleReferences(self.motors, [angle, -angle])
 

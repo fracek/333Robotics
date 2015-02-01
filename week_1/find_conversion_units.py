@@ -15,6 +15,5 @@ if __name__ == '__main__':
             else:
                 robot._move_by_angle(unit)
 
-            robot.WaitUntilDone()
     except KeyboardInterrupt:
         robot.Implode()

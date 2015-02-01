@@ -14,6 +14,5 @@ if __name__ == '__main__':
             else:
                 robot.MoveForward(unit)
 
-            robot.WaitUntilDone()
     except KeyboardInterrupt:
         robot.Implode()
