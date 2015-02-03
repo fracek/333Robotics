@@ -10,8 +10,8 @@ def wait_references_reached(func):
     return wrapper
 
 class Robot:
-    K_u = [650.0, 650.0]
-    P_u = [0.36, 0.36]
+    K_u = [750.0, 750.0]
+    P_u = [0.25, 0.25]
 
     TAU_TO_ANGLE = 17.95
 
@@ -30,6 +30,7 @@ class Robot:
             k_p = 0.6 * Robot.K_u[motor]
             k_i = 2.0 * k_p / Robot.P_u[motor]
             k_d = k_p * Robot.P_u[motor] / 8.0
+            print('Motor {}: k_p = {:.2f} k_i = {:.2f} k_d = {:.2f}'.format(motor, k_p, k_i, k_d))
             motorParams = self.interface.MotorAngleControllerParameters()
             motorParams.maxRotationAcceleration = 6.0
             motorParams.maxRotationSpeed = 12.0
