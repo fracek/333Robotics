@@ -9,6 +9,7 @@ def wait_references_reached(func):
         return ret
     return wrapper
 
+
 class Robot:
     K_u = [750.0, 750.0]
     P_u = [0.25, 0.25]
@@ -80,3 +81,9 @@ class Robot:
 
     def Implode(self):
         self.interface.terminate()
+
+    def StartLogging(self, path):
+        self.interface.startLogging(path)
+
+    def StopLogging(self):
+        self.interface.stopLogging()
