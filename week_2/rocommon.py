@@ -129,5 +129,8 @@ class Robot:
         self.interface.stopLogging()
         print('STOP LOG')
 
-    def SetRotationSpeed(self, motors, speed):
-        self.interface.setMotorRotationSpeedReferences(motors, [speed, speed])
+    def SetRotationSpeed(self, speed, motors=None):
+        if motors:
+            self.interface.setMotorRotationSpeedReferences(motors, speed)
+        else:
+            self.interface.setMotorRotationSpeedReferences(self.motors, [speed, speed])

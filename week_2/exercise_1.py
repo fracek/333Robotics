@@ -17,6 +17,6 @@ if __name__ == "__main__":
             elif robot.right_bumper.IsTouching():
                 avoidance_manouvre(robot, -90)
             else:
-                robot.SetRotationSpeed(robot.motors, SPEED)
+                robot.SetRotationSpeed(SPEED)
     except KeyboardInterrupt:
         robot.Implode()
