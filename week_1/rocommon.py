@@ -83,7 +83,9 @@ class Robot:
         self.interface.terminate()
 
     def StartLogging(self, path):
+        print('START LOG ({})'.format(path))
         self.interface.startLogging(path)
 
     def StopLogging(self):
         self.interface.stopLogging()
+        print('STOP LOG')
