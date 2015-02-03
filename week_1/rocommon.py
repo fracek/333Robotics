@@ -28,7 +28,8 @@ class Robot:
 
         for motor in self.motors:
             k_p = 0.6 * Robot.K_u[motor]
-            k_i = 2.0 * k_p / Robot.P_u[motor]
+            # TODO: hack to not die
+            k_i = 2.0 * k_p / Robot.P_u[motor] * 0.1
             k_d = k_p * Robot.P_u[motor] / 8.0
             print('Motor {}: k_p = {:.2f} k_i = {:.2f} k_d = {:.2f}'.format(motor, k_p, k_i, k_d))
             motorParams = self.interface.MotorAngleControllerParameters()
