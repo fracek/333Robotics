@@ -9,6 +9,6 @@ if __name__ == "__main__":
     try:
         while True:
             v = -(robot.TARGET_SONAR_VALUE - robot.sonar.GetValue())
-            robot.SetRotationSpeed(robot.motors, v)
+            robot.SetRotationSpeed(v)
     except KeyboardInterrupt:
         robot.Implode()
