@@ -58,7 +58,7 @@ class Robot:
 
     @wait_references_reached
     def _turn_by_angle(self, angle):
-        self.interface.increaseMotorAngleReferences(self.motors, [angle, -angle])
+        self.interface.increaseMotorAngleReferences(self.motors, [-angle, angle])
 
     def WaitUntilDone(self):
         while not self.interface.motorAngleReferencesReached(self.motors):
