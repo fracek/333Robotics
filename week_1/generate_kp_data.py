@@ -54,7 +54,7 @@ if __name__ == '__main__':
         interface.increaseMotorAngleReferences(motors, [ANGLE, ANGLE])
 
         try:
-            while True:
+            while not interface.motorAngleReferencesReached(motors):
                 pass
 
         except KeyboardInterrupt:
