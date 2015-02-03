@@ -25,6 +25,21 @@ class Bumper:
             return False
 
 
+class Sonar:
+    def __init__(self, owner, port):
+        self.owner = owner
+        self.port = port
+        owner.interface.sensorEnable(port, brickpi.SensorType.SENSOR_ULTRASONIC)
+        print('New Sonar on port {}'.format(port))
+
+    def GetValue(self):
+        result = self.owner.interface.getSensorValue(self.port)
+        if result:
+            return result[0]
+        else:
+            return False
+
+
 class Robot:
     K_u = [750.0, 750.0]
     P_u = [0.25, 0.25]
@@ -32,6 +47,8 @@ class Robot:
     TAU_TO_ANGLE = 17.95
 
     METER_TO_ANGLE = 20. / 55
+
+    TARGET_SONAR_VALUE = 34
 
     def __init__(self):
         self.interface = brickpi.Interface()
@@ -64,6 +81,9 @@ class Robot:
         # setup bumper
         self.right_bumper = Bumper(self, 0)
         self.left_bumper = Bumper(self, 3)
+
+        # setup sonar
+        self.sonar = Sonar(self, 2)
 
     def _angle_for_turn(self, turn_angle):
         return Robot.TAU_TO_ANGLE * turn_angle / 360.0
