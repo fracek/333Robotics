@@ -45,7 +45,7 @@ class Robot:
     K_u = [750.0, 750.0]
     P_u = [0.25, 0.25]
 
-    TAU_TO_ANGLE = 17.95
+    TAU_TO_ANGLE = 36.2
 
     METER_TO_ANGLE = 20. / 55
 
