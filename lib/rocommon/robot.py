@@ -69,7 +69,7 @@ class Robot:
             print('Motor {}: k_p = {:.2f} k_i = {:.2f} k_d = {:.2f}'.format(motor, k_p, k_i, k_d))
             motorParams = self.interface.MotorAngleControllerParameters()
             motorParams.maxRotationAcceleration = 6.0
-            motorParams.maxRotationSpeed = 12.0
+            motorParams.maxRotationSpeed = 8.0
             motorParams.feedForwardGain = 255 / 20.0
             motorParams.minPWM = 30.0
             motorParams.pidParameters.minOutput = -255
