@@ -70,7 +70,7 @@ class Robot:
             motorParams.maxRotationAcceleration = 6.0
             motorParams.maxRotationSpeed = 12.0
             motorParams.feedForwardGain = 255 / 20.0
-            motorParams.minPWM = 18.0
+            motorParams.minPWM = 30.0
             motorParams.pidParameters.minOutput = -255
             motorParams.pidParameters.maxOutput = 255
             motorParams.pidParameters.k_p = k_p
