@@ -1,3 +1,5 @@
+import sys
+sys.path.append('../lib')
 import rocommon
 
 if __name__ == '__main__':

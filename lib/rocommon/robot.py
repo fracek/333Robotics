@@ -102,7 +102,7 @@ class Robot:
 
     def WaitUntilDone(self):
         while not self.interface.motorAngleReferencesReached(self.motors):
-            time.Sleep(0.1)
+            time.sleep(0.1)
 
     def Turn(self, angle):
         self._turn_by_angle(self._angle_for_turn(angle))

@@ -1,3 +1,5 @@
+import sys
+sys.path.append('../lib')
 import rocommon
 
 SPEED = 4.0
