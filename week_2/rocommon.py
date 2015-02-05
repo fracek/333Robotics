@@ -1,4 +1,5 @@
 import brickpi
+import time
 
 # Wrap func to wait for angle references to be reached before returning
 def wait_references_reached(func):
@@ -101,7 +102,7 @@ class Robot:
 
     def WaitUntilDone(self):
         while not self.interface.motorAngleReferencesReached(self.motors):
-            pass
+            time.Sleep(0.1)
 
     def Turn(self, angle):
         self._turn_by_angle(self._angle_for_turn(angle))
