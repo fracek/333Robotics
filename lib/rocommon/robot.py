@@ -1,4 +1,5 @@
 import brickpi
+import time
 
 # Wrap func to wait for angle references to be reached before returning
 def wait_references_reached(func):
@@ -44,9 +45,10 @@ class Robot:
     K_u = [750.0, 750.0]
     P_u = [0.25, 0.25]
 
-    TAU_TO_ANGLE = 17.95
+    TAU_TO_ANGLE = 36.2
 
-    METER_TO_ANGLE = 20. / 55
+    #                angle / distance
+    METER_TO_ANGLE = 60. / 94.0
 
     TARGET_SONAR_VALUE = 34
 
@@ -62,14 +64,14 @@ class Robot:
         for motor in self.motors:
             k_p = 0.6 * Robot.K_u[motor]
             # TODO: hack to not die
-            k_i = 2.0 * k_p / Robot.P_u[motor] * 0.1
-            k_d = k_p * Robot.P_u[motor] / 8.0
+            k_i = 2.0 * k_p / Robot.P_u[motor] * 0.05
+            k_d = 40.0 * k_p * Robot.P_u[motor] / 8.0
             print('Motor {}: k_p = {:.2f} k_i = {:.2f} k_d = {:.2f}'.format(motor, k_p, k_i, k_d))
             motorParams = self.interface.MotorAngleControllerParameters()
             motorParams.maxRotationAcceleration = 6.0
-            motorParams.maxRotationSpeed = 12.0
+            motorParams.maxRotationSpeed = 8.0
             motorParams.feedForwardGain = 255 / 20.0
-            motorParams.minPWM = 18.0
+            motorParams.minPWM = 30.0
             motorParams.pidParameters.minOutput = -255
             motorParams.pidParameters.maxOutput = 255
             motorParams.pidParameters.k_p = k_p
@@ -101,7 +103,7 @@ class Robot:
 
     def WaitUntilDone(self):
         while not self.interface.motorAngleReferencesReached(self.motors):
-            pass
+            time.sleep(0.1)
 
     def Turn(self, angle):
         self._turn_by_angle(self._angle_for_turn(angle))

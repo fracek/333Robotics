@@ -1,6 +1,8 @@
+import sys
+sys.path.append('../lib')
 import rocommon
 
-SPEED = 4.0
+SPEED = 6.0
 
 def avoidance_manouvre(robot, angle):
     robot.MoveBackward(20)
