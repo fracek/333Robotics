@@ -9,16 +9,16 @@ K = 0.1
 if __name__ == "__main__":
     robot = rocommon.Robot()
 
-    robot.SetRotationSpeed(SPEED)
-    initial_distance = robot.sonar.GetValue()
+    robot.set_rotation_speed(SPEED)
+    initial_distance = robot.sonar.value()
     left_speed = SPEED
     right_speed = SPEED
     try:
         while True:
-            if robot.left_bumper.IsTouching() or robot.right_bumper.IsTouching():
+            if robot.left_bumper.touching() or robot.right_bumper.touching():
                 break
 
-            dist = initial_distance - robot.sonar.GetValue()
+            dist = initial_distance - robot.sonar.value()
             # 0 = R, 1 = L
             if dist < 0:  # too far away
                 # left wheel > right wheel
@@ -28,7 +28,7 @@ if __name__ == "__main__":
                 # right wheel > left wheel
                 left_speed = SPEED
                 right_speed = SPEED + K * dist
-            robot.SetRotationSpeed([right_speed, left_speed], motors=[0, 1])
+            robot.set_rotation_speed([right_speed, left_speed], motors=[0, 1])
 
     except KeyboardInterrupt:
-        robot.Implode()
+        robot.implode()
