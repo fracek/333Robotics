@@ -4,6 +4,7 @@ import rocommon
 
 SPEED = 6.0
 
+
 def avoidance_manouvre(robot, angle):
     robot.MoveBackward(20)
     robot.Turn(angle)

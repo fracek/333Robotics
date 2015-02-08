@@ -20,11 +20,11 @@ if __name__ == "__main__":
 
             dist = initial_distance - robot.sonar.GetValue()
             # 0 = R, 1 = L
-            if dist < 0: # too far away
+            if dist < 0:  # too far away
                 # left wheel > right wheel
                 left_speed = SPEED - K * dist
                 right_speed = SPEED
-            elif dist > 0: # too close
+            elif dist > 0:  # too close
                 # right wheel > left wheel
                 left_speed = SPEED
                 right_speed = SPEED + K * dist
