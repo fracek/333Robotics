@@ -52,11 +52,24 @@ class Robot:
 
     TARGET_SONAR_VALUE = 34
 
+    # BrickPi sensor and motor ports
+    # http://www.dexterindustries.com/BrickPi/getting-started/attaching-lego/
+    S1 = 0
+    S2 = 1
+    S3 = 2
+    S4 = 3
+    S5 = 4
+
+    MA = 0
+    MB = 1
+    MC = 2
+    MD = 3
+
     def __init__(self):
         self.interface = brickpi.Interface()
         self.interface.initialize()
 
-        self.motors = [0, 1]
+        self.motors = [Robot.MA, Robot.MB]
 
         self.interface.motorEnable(self.motors[0])
         self.interface.motorEnable(self.motors[1])
@@ -81,11 +94,11 @@ class Robot:
             self.interface.setMotorAngleControllerParameters(motor, motorParams)
 
         # setup bumper
-        self.right_bumper = Bumper(self, 0)
-        self.left_bumper = Bumper(self, 3)
+        self.right_bumper = Bumper(self, Robot.S1)
+        self.left_bumper = Bumper(self, Robot.S4)
 
         # setup sonar
-        self.sonar = Sonar(self, 2)
+        self.sonar = Sonar(self, Robot.S3)
 
     def _angle_for_turn(self, turn_angle):
         return Robot.TAU_TO_ANGLE * turn_angle / 360.0
