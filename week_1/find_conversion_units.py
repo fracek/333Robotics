@@ -18,4 +18,4 @@ if __name__ == '__main__':
                 robot._move_by_angle(unit)
 
     except KeyboardInterrupt:
-        robot.Implode()
+        robot.implode()

@@ -12,9 +12,9 @@ if __name__ == '__main__':
             unit = float(input("Unit (real): "))
 
             if choice == 'T' or choice == 't':
-                robot.Turn(unit)
+                robot.turn(unit)
             else:
-                robot.MoveForward(unit)
+                robot.move_forward(unit)
 
     except KeyboardInterrupt:
-        robot.Implode()
+        robot.implode()

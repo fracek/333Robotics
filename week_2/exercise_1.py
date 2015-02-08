@@ -6,8 +6,8 @@ SPEED = 6.0
 
 
 def avoidance_manouvre(robot, angle):
-    robot.MoveBackward(20)
-    robot.Turn(angle)
+    robot.move_backward(20)
+    robot.turn(angle)
 
 
 if __name__ == "__main__":
@@ -15,11 +15,11 @@ if __name__ == "__main__":
 
     try:
         while True:
-            if robot.left_bumper.IsTouching():
+            if robot.left_bumper.touching():
                 avoidance_manouvre(robot, 90)
-            elif robot.right_bumper.IsTouching():
+            elif robot.right_bumper.touching():
                 avoidance_manouvre(robot, -90)
             else:
-                robot.SetRotationSpeed(SPEED)
+                robot.set_rotation_speed(SPEED)
     except KeyboardInterrupt:
-        robot.Implode()
+        robot.implode()

@@ -7,7 +7,7 @@ def wait_references_reached(func):
     def wrapper(*args, **kwargs):
         self = args[0]
         ret = func(*args, **kwargs)
-        self.WaitUntilDone()
+        self.wait_until_done()
         return ret
     return wrapper
 
@@ -20,7 +20,7 @@ class Bumper:
         owner.interface.sensorEnable(port, brickpi.SensorType.SENSOR_TOUCH)
         print('New Bumper on port {}'.format(port))
 
-    def IsTouching(self):
+    def touching(self):
         result = self.owner.interface.getSensorValue(self.port)
         if result:
             return result[0] == 1
@@ -37,7 +37,7 @@ class Sonar:
             port, brickpi.SensorType.SENSOR_ULTRASONIC)
         print('New Sonar on port {}'.format(port))
 
-    def GetValue(self):
+    def value(self):
         result = self.owner.interface.getSensorValue(self.port)
         if result:
             return result[0]
@@ -122,37 +122,37 @@ class Robot:
         self.interface.increaseMotorAngleReferences(
             self.motors, [-angle, angle])
 
-    def WaitUntilDone(self):
+    def wait_until_done(self):
         while not self.interface.motorAngleReferencesReached(self.motors):
             time.sleep(0.1)
 
-    def Turn(self, angle):
+    def turn(self, angle):
         self._turn_by_angle(self._angle_for_turn(angle))
 
     def Left90deg(self):
-        self.Turn(-90)
+        self.turn(-90)
 
     def Right90deg(self):
-        self.Turn(90)
+        self.turn(90)
 
-    def MoveForward(self, distance):
+    def move_forward(self, distance):
         self._move_by_angle(self._angle_for_distance(distance))
 
-    def MoveBackward(self, distance):
+    def move_backward(self, distance):
         self._move_by_angle(-self._angle_for_distance(distance))
 
-    def Implode(self):
+    def implode(self):
         self.interface.terminate()
 
-    def StartLogging(self, path):
+    def start_logging(self, path):
         print('START LOG ({})'.format(path))
         self.interface.startLogging(path)
 
-    def StopLogging(self):
+    def stop_logging(self):
         self.interface.stopLogging()
         print('STOP LOG')
 
-    def SetRotationSpeed(self, speed, motors=None):
+    def set_rotation_speed(self, speed, motors=None):
         if motors:
             self.interface.setMotorRotationSpeedReferences(motors, speed)
         else:
