@@ -1,6 +1,7 @@
 import brickpi
 import time
 
+
 # Wrap func to wait for angle references to be reached before returning
 def wait_references_reached(func):
     def wrapper(*args, **kwargs):
@@ -12,6 +13,7 @@ def wait_references_reached(func):
 
 
 class Bumper:
+
     def __init__(self, owner, port):
         self.owner = owner
         self.port = port
@@ -27,10 +29,12 @@ class Bumper:
 
 
 class Sonar:
+
     def __init__(self, owner, port):
         self.owner = owner
         self.port = port
-        owner.interface.sensorEnable(port, brickpi.SensorType.SENSOR_ULTRASONIC)
+        owner.interface.sensorEnable(
+            port, brickpi.SensorType.SENSOR_ULTRASONIC)
         print('New Sonar on port {}'.format(port))
 
     def GetValue(self):
@@ -52,11 +56,24 @@ class Robot:
 
     TARGET_SONAR_VALUE = 34
 
+    # BrickPi sensor and motor ports
+    # http://www.dexterindustries.com/BrickPi/getting-started/attaching-lego/
+    S1 = 0
+    S2 = 1
+    S3 = 2
+    S4 = 3
+    S5 = 4
+
+    MA = 0
+    MB = 1
+    MC = 2
+    MD = 3
+
     def __init__(self):
         self.interface = brickpi.Interface()
         self.interface.initialize()
 
-        self.motors = [0, 1]
+        self.motors = [Robot.MA, Robot.MB]
 
         self.interface.motorEnable(self.motors[0])
         self.interface.motorEnable(self.motors[1])
@@ -66,7 +83,8 @@ class Robot:
             # TODO: hack to not die
             k_i = 2.0 * k_p / Robot.P_u[motor] * 0.05
             k_d = 40.0 * k_p * Robot.P_u[motor] / 8.0
-            print('Motor {}: k_p = {:.2f} k_i = {:.2f} k_d = {:.2f}'.format(motor, k_p, k_i, k_d))
+            print('Motor {}: k_p = {:.2f} k_i = {:.2f} k_d = {:.2f}'.format(
+                motor, k_p, k_i, k_d))
             motorParams = self.interface.MotorAngleControllerParameters()
             motorParams.maxRotationAcceleration = 6.0
             motorParams.maxRotationSpeed = 8.0
@@ -78,14 +96,15 @@ class Robot:
             motorParams.pidParameters.k_i = k_i
             motorParams.pidParameters.k_d = k_d
 
-            self.interface.setMotorAngleControllerParameters(motor, motorParams)
+            self.interface.setMotorAngleControllerParameters(
+                motor, motorParams)
 
         # setup bumper
-        self.right_bumper = Bumper(self, 0)
-        self.left_bumper = Bumper(self, 3)
+        self.right_bumper = Bumper(self, Robot.S1)
+        self.left_bumper = Bumper(self, Robot.S4)
 
         # setup sonar
-        self.sonar = Sonar(self, 2)
+        self.sonar = Sonar(self, Robot.S3)
 
     def _angle_for_turn(self, turn_angle):
         return Robot.TAU_TO_ANGLE * turn_angle / 360.0
@@ -95,11 +114,13 @@ class Robot:
 
     @wait_references_reached
     def _move_by_angle(self, angle):
-        self.interface.increaseMotorAngleReferences(self.motors, [angle, angle])
+        self.interface.increaseMotorAngleReferences(
+            self.motors, [angle, angle])
 
     @wait_references_reached
     def _turn_by_angle(self, angle):
-        self.interface.increaseMotorAngleReferences(self.motors, [-angle, angle])
+        self.interface.increaseMotorAngleReferences(
+            self.motors, [-angle, angle])
 
     def WaitUntilDone(self):
         while not self.interface.motorAngleReferencesReached(self.motors):
@@ -135,4 +156,5 @@ class Robot:
         if motors:
             self.interface.setMotorRotationSpeedReferences(motors, speed)
         else:
-            self.interface.setMotorRotationSpeedReferences(self.motors, [speed, speed])
+            self.interface.setMotorRotationSpeedReferences(
+                self.motors, [speed, speed])

@@ -67,14 +67,15 @@ def generate_plot(data, figname, title):
     fig.suptitle(title)
 
     fig.savefig(figname)
-    #plt.show()
+    # plt.show()
 
 
 if __name__ == '__main__':
     k_ps = [x * 50.0 for x in range(1, 19)]
     for k_p in k_ps:
         data = read_log(LOG_BASE_PATH.format(int(k_p * 100)))
-        generate_plot(data, 'generated/k_p_{}.eps'.format(int(k_p * 100)), 'K_p = {:.2f}'.format(k_p))
+        generate_plot(
+            data, 'generated/k_p_{}.eps'.format(int(k_p * 100)), 'K_p = {:.2f}'.format(k_p))
 
     # generate graphs for tuned data
     tuned_data = read_log(TUNED_DATA_PATH)
