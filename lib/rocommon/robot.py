@@ -143,7 +143,7 @@ class Robot:
     @wait_references_reached
     def _turn_by_angle(self, angle):
         self.interface.increaseMotorAngleReferences(
-            self.motors, [-angle, angle])
+            self.motors, [angle, -angle])
 
     def wait_until_done(self):
         while not self.interface.motorAngleReferencesReached(self.motors):
@@ -153,10 +153,10 @@ class Robot:
         self._turn_by_angle(self._angle_for_turn(angle))
 
     def Left90deg(self):
-        self.turn(-90)
+        self.turn(90)
 
     def Right90deg(self):
-        self.turn(90)
+        self.turn(-90)
 
     def move_forward(self, distance):
         self._move_by_angle(self._angle_for_distance(distance))
