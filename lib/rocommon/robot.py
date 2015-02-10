@@ -20,6 +20,9 @@ class Bumper:
         owner.interface.sensorEnable(port, brickpi.SensorType.SENSOR_TOUCH)
         print('New Bumper on port {}'.format(port))
 
+    def __str__(self):
+        return 'Bumper(owner = {}, port = {})'.format(self.owner, self.port)
+
     def touching(self):
         result = self.owner.interface.getSensorValue(self.port)
         if result:
@@ -30,19 +33,34 @@ class Bumper:
 
 class Sonar:
 
-    def __init__(self, owner, port):
+    def __init__(self, owner, sonarPort):
         self.owner = owner
-        self.port = port
+        self.sonarPort = sonarPort
         owner.interface.sensorEnable(
-            port, brickpi.SensorType.SENSOR_ULTRASONIC)
-        print('New Sonar on port {}'.format(port))
+            sonarPort, brickpi.SensorType.SENSOR_ULTRASONIC)
+
+    def __str__(self):
+        return 'Sonar(owner = {}, sonarPort = {})'.format(self.owner, self.sonarPort)
 
     def value(self):
-        result = self.owner.interface.getSensorValue(self.port)
+        result = self.owner.interface.getSensorValue(self.sonarPort)
         if result:
             return result[0]
         else:
             return False
+
+
+class SpinningSonar(Sonar):
+
+    def __init__(self, owner, sonarPort, motorPort):
+        Sonar.__init__(self, owner, sonarPort)
+
+        self.motorPort = motorPort
+        owner.interface.motorEnable(motorPort)
+        # TODO: setup motor parameters
+
+    def __str__(self):
+        return 'SpinningSonar(owner = {}, sonarPort = {}, motorPort = {})'.format(self.owner, self.sonarPort, self.motorPort)
 
 
 class Robot:
@@ -69,7 +87,7 @@ class Robot:
     MC = 2
     MD = 3
 
-    def __init__(self):
+    def __init__(self, use_spinning_sonar=False):
         self.interface = brickpi.Interface()
         self.interface.initialize()
 
@@ -82,7 +100,7 @@ class Robot:
             k_p = 0.6 * Robot.K_u[motor]
             # TODO: hack to not die
             k_i = 2.0 * k_p / Robot.P_u[motor] * 0.05
-            k_d = 40.0 * k_p * Robot.P_u[motor] / 8.0
+            k_d = k_p * Robot.P_u[motor] / 8.0
             print('Motor {}: k_p = {:.2f} k_i = {:.2f} k_d = {:.2f}'.format(
                 motor, k_p, k_i, k_d))
             motorParams = self.interface.MotorAngleControllerParameters()
@@ -102,9 +120,14 @@ class Robot:
         # setup bumper
         self.right_bumper = Bumper(self, Robot.S1)
         self.left_bumper = Bumper(self, Robot.S4)
+        print('Bumpers: [{}, {}]'.format(self.left_bumper, self.right_bumper))
 
         # setup sonar
-        self.sonar = Sonar(self, Robot.S3)
+        if use_spinning_sonar:
+            self.sonar = SpinningSonar(self, Robot.S3, Robot.MC)
+        else:
+            self.sonar = Sonar(self, Robot.S3)
+        print('Sonar: {}'.format(self.sonar))
 
     def _angle_for_turn(self, turn_angle):
         return Robot.TAU_TO_ANGLE * turn_angle / 360.0
@@ -120,7 +143,7 @@ class Robot:
     @wait_references_reached
     def _turn_by_angle(self, angle):
         self.interface.increaseMotorAngleReferences(
-            self.motors, [-angle, angle])
+            self.motors, [angle, -angle])
 
     def wait_until_done(self):
         while not self.interface.motorAngleReferencesReached(self.motors):
@@ -130,10 +153,10 @@ class Robot:
         self._turn_by_angle(self._angle_for_turn(angle))
 
     def Left90deg(self):
-        self.turn(-90)
+        self.turn(90)
 
     def Right90deg(self):
-        self.turn(90)
+        self.turn(-90)
 
     def move_forward(self, distance):
         self._move_by_angle(self._angle_for_distance(distance))
