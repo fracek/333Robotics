@@ -50,6 +50,16 @@ class ProbabilisticRobot(Robot):
         Robot.turn(self, angle)
         self.ps.predict_turn(angle)
 
+    def move_to_waypoint(self, wp):
+        mean_x = np.sum(self.x.T * self.w, axis=1)
+        d = mean_x[:2] - wp
+        abs_angle = np.arctan2(d[1], d[0])
+        angle = abs_angle - mean_x[2]
+        # TODO: efficiently turn, aka wrap angle
+        self.turn(angle)
+        distance = np.sqrt(np.sum(d**2))
+        self.move_forward(distance)
+
     def draw_particles(self):
         particles_list = [(r[0], r[1], r[2]) for r in self.x]
         print('drawParticles: {}'.format(particles_list))
