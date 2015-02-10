@@ -1,0 +1,55 @@
+import numpy as np
+from robot import Robot
+
+
+class ParticleSet:
+
+    def __init__(self, particles_number, sigma):
+        self.particles_number = particles_number
+        self.mu = 0.0
+        self.sigma = sigma
+        # [x, y, theta]
+        self.x = np.zeros([particles_number, 3])
+        self.w = np.ones(particles_number) / particles_number
+
+    def _normal(self):
+        return np.random.normal(self.mu, self.sigma, self.particles_number)
+
+    def predict_move(self, distance):
+        e = self._normal()
+        f = self._normal()
+        # x
+        self.x[:, 0] += (distance + e) * np.cos(self.x[:, 2])
+        # y
+        self.x[:, 1] += (distance + e) * np.sin(self.x[:, 2])
+        # theta
+        self.x[:, 2] += f
+
+        return self.x
+
+    def predict_turn(self, alpha):
+        g = self._normal()
+        self.x[:, 2] += alpha + g
+
+        return self.x
+
+
+class ProbabilisticRobot(Robot):
+
+    NUMBER_OF_PARTICLES = 100
+
+    def __init__(self, sigma=0.3, use_spinning_sonar=False):
+        Robot.__init__(use_spinning_sonar)
+        self.ps = ParticleSet(ProbabilisticRobot.NUMBER_OF_PARTICLES, sigma)
+
+    def move_forward(self, distance):
+        Robot.move_forward(self, distance)
+        self.ps.predict_move(distance)
+
+    def turn(self, angle):
+        Robot.turn(self, angle)
+        self.ps.predict_turn(angle)
+
+    def draw_particles(self):
+        particles_list = [(r[0], r[1], r[2]) for r in self.x]
+        print('drawParticles: {}'.format(particles_list))
