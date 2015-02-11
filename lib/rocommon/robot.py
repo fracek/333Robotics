@@ -94,8 +94,8 @@ class Robot:
 
         self.motors = [Robot.MA, Robot.MB]
 
-        self.interface.motorEnable(self.motors[0])
-        self.interface.motorEnable(self.motors[1])
+        #self.interface.motorEnable(self.motors[0])
+        #self.interface.motorEnable(self.motors[1])
 
         for motor in self.motors:
             k_p = 0.6 * Robot.K_u[motor]
