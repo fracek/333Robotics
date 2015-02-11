@@ -51,8 +51,12 @@ class ProbabilisticRobot(Robot):
         Robot.turn(self, angle)
         self.ps.predict_turn(angle)
 
-    def move_to_waypoint(self, wp):
+    def position_estimate(self):
         mean_x = np.sum(self.ps.x.T * self.ps.w, axis=1)
+        return mean_x
+
+    def move_to_waypoint(self, wp):
+        mean_x = self.position_estimate()
         d = wp - mean_x[:2]
         abs_angle = atan2(d[1], d[0])
         angle = np.degrees(abs_angle) - mean_x[2]
