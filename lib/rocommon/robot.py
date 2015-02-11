@@ -1,5 +1,6 @@
 import brickpi
 import time
+from math import pi
 
 
 # Wrap func to wait for angle references to be reached before returning
@@ -130,7 +131,7 @@ class Robot:
         print('Sonar: {}'.format(self.sonar))
 
     def _angle_for_turn(self, turn_angle):
-        return Robot.TAU_TO_ANGLE * turn_angle / 360.0
+        return Robot.TAU_TO_ANGLE * turn_angle / (2 * pi)
 
     def _angle_for_distance(self, distance):
         return Robot.METER_TO_ANGLE * distance
@@ -152,11 +153,11 @@ class Robot:
     def turn(self, angle):
         self._turn_by_angle(self._angle_for_turn(angle))
 
-    def Left90deg(self):
-        self.turn(90)
+    def left_90(self):
+        self.turn(pi/2)
 
-    def Right90deg(self):
-        self.turn(-90)
+    def right_90(self):
+        self.turn(-pi/2)
 
     def move_forward(self, distance):
         self._move_by_angle(self._angle_for_distance(distance))

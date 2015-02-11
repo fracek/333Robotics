@@ -20,7 +20,7 @@ if __name__ == "__main__":
             for _ in xrange(0, 4):
                 robot.move_forward(STEP_DISTANCE)
                 print_position(robot)
-            robot.turn(90)
+            robot.left_90()
             print_position(robot)
     except KeyboardInterrupt:
         robot.implode()

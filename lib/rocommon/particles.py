@@ -59,7 +59,7 @@ class ProbabilisticRobot(Robot):
         mean_x = self.position_estimate()
         d = wp - mean_x[:2]
         abs_angle = atan2(d[1], d[0])
-        angle = np.degrees(abs_angle) - mean_x[2]
+        angle = abs_angle - mean_x[2]
         self.turn(angle)
         distance = np.sqrt(np.sum(d**2))
         self.move_forward(distance)
