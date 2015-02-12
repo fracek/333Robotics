@@ -2,10 +2,8 @@ import sys
 sys.path.append('../lib')
 import rocommon
 
-SIGMA = 0.0001
-
 if __name__ == "__main__":
-    robot = rocommon.ProbabilisticRobot(sigma=SIGMA)
+    robot = rocommon.ProbabilisticRobot()
 
     try:
         while True:

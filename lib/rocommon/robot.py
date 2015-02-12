@@ -158,10 +158,10 @@ class Robot:
         self._turn_by_angle(self._angle_for_turn(angle))
 
     def left_90(self):
-        self.turn(pi/2)
+        self.turn(pi / 2)
 
     def right_90(self):
-        self.turn(-pi/2)
+        self.turn(-pi / 2)
 
     def move_forward(self, distance):
         self._move_by_angle(self._angle_for_distance(distance))
