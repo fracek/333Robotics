@@ -1,6 +1,5 @@
 import numpy as np
 from robot import Robot
-from math import atan2
 
 
 class ParticleSet:
@@ -60,8 +59,10 @@ class ProbabilisticRobot(Robot):
     def move_to_waypoint(self, wp):
         mean_x = self.position_estimate()
         d = wp - mean_x[:2]
-        abs_angle = atan2(d[1], d[0])
+        abs_angle = np.arctan2(d[1], d[0])
         angle = abs_angle - mean_x[2]
+        if abs(angle) > np.pi:
+            angle -= np.sign(angle) * 2.0 * np.pi
         self.turn(angle)
         distance = np.sqrt(np.sum(d ** 2))
         self.move_forward(distance)
