@@ -3,13 +3,6 @@ sys.path.append('../lib')
 import rocommon
 
 STEP_DISTANCE = 10
-WEB = True
-
-def print_position(robot):
-    if WEB:
-        robot.draw_particles()
-    else:
-        print('{}'.format(robot.ps.x))
 
 if __name__ == "__main__":
     robot = rocommon.ProbabilisticRobot()
@@ -18,8 +11,8 @@ if __name__ == "__main__":
         for _ in xrange(0, 4):
             for _ in xrange(0, 4):
                 robot.move_forward(STEP_DISTANCE)
-                print_position(robot)
+                robot.draw_particles()
             robot.left_90()
-            print_position(robot)
+            robot.draw_particles()
     except KeyboardInterrupt:
         robot.implode()
