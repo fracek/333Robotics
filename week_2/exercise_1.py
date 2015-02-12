@@ -1,6 +1,7 @@
 import sys
 sys.path.append('../lib')
 import rocommon
+from math import pi
 
 SPEED = 6.0
 
@@ -16,9 +17,9 @@ if __name__ == "__main__":
     try:
         while True:
             if robot.left_bumper.touching():
-                avoidance_manouvre(robot, 90)
+                avoidance_manouvre(robot, pi/2)
             elif robot.right_bumper.touching():
-                avoidance_manouvre(robot, -90)
+                avoidance_manouvre(robot, -pi/2)
             else:
                 robot.set_rotation_speed(SPEED)
     except KeyboardInterrupt:

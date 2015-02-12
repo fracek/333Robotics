@@ -1,5 +1,6 @@
 import brickpi
 import time
+from math import pi
 
 
 # Wrap func to wait for angle references to be reached before returning
@@ -91,16 +92,17 @@ class Robot:
         self.interface = brickpi.Interface()
         self.interface.initialize()
 
-        self.motors = [Robot.MA, Robot.MB]
+        self.motors = {'R': {'port': Robot.MA, 'K_u': 750.0, 'P_u': 0.25},
+                       'L': {'port': Robot.MD, 'K_u': 750.0, 'P_u': 0.25}}
 
-        self.interface.motorEnable(self.motors[0])
-        self.interface.motorEnable(self.motors[1])
+        self.interface.motorEnable(self.motors['L']['port'])
+        self.interface.motorEnable(self.motors['R']['port'])
 
-        for motor in self.motors:
-            k_p = 0.6 * Robot.K_u[motor]
+        for _, motor in self.motors.items():
+            k_p = 0.6 * motor['K_u']
             # TODO: hack to not die
-            k_i = 2.0 * k_p / Robot.P_u[motor] * 0.05
-            k_d = k_p * Robot.P_u[motor] / 8.0
+            k_i = 2.0 * k_p / motor['P_u'] * 0.05
+            k_d = k_p * motor['P_u'] / 8.0
             print('Motor {}: k_p = {:.2f} k_i = {:.2f} k_d = {:.2f}'.format(
                 motor, k_p, k_i, k_d))
             motorParams = self.interface.MotorAngleControllerParameters()
@@ -115,7 +117,7 @@ class Robot:
             motorParams.pidParameters.k_d = k_d
 
             self.interface.setMotorAngleControllerParameters(
-                motor, motorParams)
+                motor['port'], motorParams)
 
         # setup bumper
         self.right_bumper = Bumper(self, Robot.S1)
@@ -129,8 +131,11 @@ class Robot:
             self.sonar = Sonar(self, Robot.S3)
         print('Sonar: {}'.format(self.sonar))
 
+    def _motor_ports(self):
+        return [m['port'] for _, m in self.motors.items()]
+
     def _angle_for_turn(self, turn_angle):
-        return Robot.TAU_TO_ANGLE * turn_angle / 360.0
+        return Robot.TAU_TO_ANGLE * turn_angle / (2 * pi)
 
     def _angle_for_distance(self, distance):
         return Robot.METER_TO_ANGLE * distance
@@ -138,25 +143,25 @@ class Robot:
     @wait_references_reached
     def _move_by_angle(self, angle):
         self.interface.increaseMotorAngleReferences(
-            self.motors, [angle, angle])
+            self._motor_ports(), [angle, angle])
 
     @wait_references_reached
     def _turn_by_angle(self, angle):
         self.interface.increaseMotorAngleReferences(
-            self.motors, [angle, -angle])
+            self._motor_ports(), [angle, -angle])
 
     def wait_until_done(self):
-        while not self.interface.motorAngleReferencesReached(self.motors):
+        while not self.interface.motorAngleReferencesReached(self._motor_ports()):
             time.sleep(0.1)
 
     def turn(self, angle):
         self._turn_by_angle(self._angle_for_turn(angle))
 
-    def Left90deg(self):
-        self.turn(90)
+    def left_90(self):
+        self.turn(pi / 2)
 
-    def Right90deg(self):
-        self.turn(-90)
+    def right_90(self):
+        self.turn(-pi / 2)
 
     def move_forward(self, distance):
         self._move_by_angle(self._angle_for_distance(distance))
@@ -180,4 +185,4 @@ class Robot:
             self.interface.setMotorRotationSpeedReferences(motors, speed)
         else:
             self.interface.setMotorRotationSpeedReferences(
-                self.motors, [speed, speed])
+                self._motor_ports(), [speed, speed])
