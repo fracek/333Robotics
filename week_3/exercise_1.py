@@ -2,7 +2,6 @@ import sys
 sys.path.append('../lib')
 import rocommon
 
-SIGMA = 0.3
 STEP_DISTANCE = 10
 WEB = True
 
@@ -13,7 +12,7 @@ def print_position(robot):
         print('{}'.format(robot.ps.x))
 
 if __name__ == "__main__":
-    robot = rocommon.ProbabilisticRobot(sigma=SIGMA)
+    robot = rocommon.ProbabilisticRobot()
 
     try:
         for _ in xrange(0, 4):

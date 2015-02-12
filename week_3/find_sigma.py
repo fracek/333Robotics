@@ -2,16 +2,16 @@ import sys
 sys.path.append('../lib')
 import rocommon
 
-SIGMA = 0.3
 STEP_DISTANCE = 20
+F_SIGMA = 0.001 # 0.3 deg to rad
 
 if __name__ == "__main__":
-    robot = rocommon.ProbabilisticRobot(sigma=SIGMA)
+    robot = rocommon.ProbabilisticRobot(e_sigma=0.5, f_sigma=F_SIGMA)
 
     try:
-        for _ in xrange(0, 200 / STEP_DISTANCE):
+        for dist in xrange(0, 200 / STEP_DISTANCE):
             robot.move_forward(STEP_DISTANCE)
-            print('I AM IN {}'.format(robot.position_estimate()))
+            print('{} =  {}'.format(dist, robot.position_estimate()))
             sys.stdin.readline()
     except KeyboardInterrupt:
         pass
