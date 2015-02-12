@@ -98,7 +98,7 @@ class Robot:
         self.interface.motorEnable(self.motors['L']['port'])
         self.interface.motorEnable(self.motors['R']['port'])
 
-        for motor in self.motors:
+        for _, motor in self.motors.items():
             k_p = 0.6 * motor['K_u']
             # TODO: hack to not die
             k_i = 2.0 * k_p / motor['P_u'] * 0.05
