@@ -132,7 +132,7 @@ class Robot:
         print('Sonar: {}'.format(self.sonar))
 
     def _motor_ports(self):
-        return [m['port'] for m in self.motors]
+        return [m['port'] for _, m in self.motors.items()]
 
     def _angle_for_turn(self, turn_angle):
         return Robot.TAU_TO_ANGLE * turn_angle / (2 * pi)
