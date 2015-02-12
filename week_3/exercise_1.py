@@ -4,7 +4,7 @@ import rocommon
 
 SIGMA = 0.3
 STEP_DISTANCE = 10
-WEB = False
+WEB = True
 
 def print_position(robot):
     if WEB:
