@@ -3,7 +3,7 @@ sys.path.append('../lib')
 import rocommon
 
 STEP_DISTANCE = 20
-F_SIGMA = 0.05
+F_SIGMA = 0.1
 
 if __name__ == "__main__":
     robot = rocommon.ProbabilisticRobot(e_sigma=0.5, f_sigma=F_SIGMA)
