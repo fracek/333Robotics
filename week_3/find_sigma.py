@@ -1,6 +1,7 @@
 import sys
 sys.path.append('../lib')
 import rocommon
+from math import pi
 
 STEP_DISTANCE = 20
 E_SIGMA = 0.5
