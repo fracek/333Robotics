@@ -11,7 +11,7 @@ if __name__ == "__main__":
     robot = rocommon.ProbabilisticRobot(e_sigma=E_SIGMA, f_sigma=F_SIGMA, g_sigma=G_SIGMA)
 
     try:
-        if test_straight_movement:
+        if False:
             for dist in xrange(0, 200 / STEP_DISTANCE):
                 robot.move_forward(STEP_DISTANCE)
                 print('{} =  {}'.format(dist, robot.position_estimate()))
