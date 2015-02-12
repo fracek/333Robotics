@@ -92,8 +92,8 @@ class Robot:
         self.interface = brickpi.Interface()
         self.interface.initialize()
 
-        self.motors = {'R': {'port': Robot.MA, 'K_u': 750.0, 'P_u': 0.25},
-                       'L': {'port': Robot.MB, 'K_u': 750.0, 'P_u': 0.25}}
+        self.motors = {'R': {'port': Robot.MC, 'K_u': 750.0, 'P_u': 0.25},
+                       'L': {'port': Robot.MD, 'K_u': 750.0, 'P_u': 0.25}}
 
         self.interface.motorEnable(self.motors['L']['port'])
         self.interface.motorEnable(self.motors['R']['port'])
