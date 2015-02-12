@@ -20,7 +20,7 @@ if __name__ == "__main__":
         else:
             for angle in xrange(0, 10):
                 robot.turn(2 * pi / 10.0)
-                print('{} =  {}'.format(dist, robot.position_estimate()))
+                print('{} =  {}'.format(angle * 20.0, robot.position_estimate()))
     except KeyboardInterrupt:
         pass
     robot.implode()
