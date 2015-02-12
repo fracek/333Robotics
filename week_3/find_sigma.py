@@ -12,6 +12,7 @@ if __name__ == "__main__":
         for _ in xrange(0, 200 / STEP_DISTANCE):
             robot.move_forward(STEP_DISTANCE)
             print('I AM IN {}'.format(robot.position_estimate()))
+            sys.stdin.readline()
     except KeyboardInterrupt:
         pass
     robot.implode()
