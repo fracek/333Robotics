@@ -129,8 +129,8 @@ class Robot:
         self.interface = brickpi.Interface()
         self.interface.initialize()
 
-        self.motors = {'R': {'port': Robot.MA, 'K_u': 750.0, 'P_u': 0.25, 'instance': None},
-                       'L': {'port': Robot.MD, 'K_u': 750.0, 'P_u': 0.25, 'instance': None}}
+        self.motors = {'R': {'port': Robot.MD, 'K_u': 750.0, 'P_u': 0.25, 'instance': None},
+                       'L': {'port': Robot.MA, 'K_u': 750.0, 'P_u': 0.25, 'instance': None}}
 
         for _, motor in self.motors.items():
             motor['instance'] = Motor(self, motor)
