@@ -73,4 +73,4 @@ if __name__ == "__main__":
             ax.quiver(as_array(mean_x[0]), as_array(mean_x[1]),
                       np.cos(as_array(mean_x[2])), np.sin(as_array(mean_x[2])),
                       color=cgen[i], width=5 * ARROW_WIDTH)
-    plt.savefig('position_estimates.eps')
+    plt.savefig('position_estimates.pdf')
