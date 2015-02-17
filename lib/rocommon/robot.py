@@ -47,6 +47,7 @@ class Motor:
         print('Angles = {}'.format(angles))
         return angles
 
+
 class Bumper:
 
     def __init__(self, owner, port):
@@ -68,11 +69,12 @@ class Bumper:
 
 class Sonar:
 
-    def __init__(self, owner, sonarPort):
+    def __init__(self, owner, sonarPort, offset=0.0):
         self.owner = owner
         self.sonarPort = sonarPort
         owner.interface.sensorEnable(
             sonarPort, brickpi.SensorType.SENSOR_ULTRASONIC)
+        self.offset = offset
 
     def __str__(self):
         return 'Sonar(owner = {}, sonarPort = {})'.format(self.owner, self.sonarPort)
@@ -80,7 +82,7 @@ class Sonar:
     def value(self):
         result = self.owner.interface.getSensorValue(self.sonarPort)
         if result:
-            return result[0]
+            return result[0] + self.offset
         else:
             return False
 
