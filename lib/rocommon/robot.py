@@ -13,6 +13,40 @@ def wait_references_reached(func):
     return wrapper
 
 
+class Motor:
+
+    def __init__(self, owner, parameters):
+        self.owner = owner
+        self.parameters = parameters
+        owner.interface.motorEnable(parameters['port'])
+
+        k_p = 0.6 * parameters['K_u']
+        # TODO: hack to not die
+        k_i = 2.0 * k_p / parameters['P_u'] * 0.05
+        k_d = k_p * parameters['P_u'] / 8.0
+
+        print('Motor {}: k_p = {:.2f} k_i = {:.2f} k_d = {:.2f}'.format(
+            parameters['port'], k_p, k_i, k_d))
+
+        motorParams = owner.interface.MotorAngleControllerParameters()
+        motorParams.maxRotationAcceleration = 6.0
+        motorParams.maxRotationSpeed = 8.0
+        motorParams.feedForwardGain = 255 / 20.0
+        motorParams.minPWM = 30.0
+        motorParams.pidParameters.minOutput = -255
+        motorParams.pidParameters.maxOutput = 255
+        motorParams.pidParameters.k_p = k_p
+        motorParams.pidParameters.k_i = k_i
+        motorParams.pidParameters.k_d = k_d
+
+        owner.interface.setMotorAngleControllerParameters(
+            parameters['port'], motorParams)
+
+    def angle(self):
+        angles = self.owner.interface.getMotorAngles([self.parameters['port']])
+        print('Angles = {}'.format(angles))
+        return angles
+
 class Bumper:
 
     def __init__(self, owner, port):
@@ -60,6 +94,9 @@ class SpinningSonar(Sonar):
         owner.interface.motorEnable(motorPort)
         # TODO: setup motor parameters
 
+    def rotate_to(self, angle):
+        pass
+
     def __str__(self):
         return 'SpinningSonar(owner = {}, sonarPort = {}, motorPort = {})'.format(self.owner, self.sonarPort, self.motorPort)
 
@@ -92,32 +129,11 @@ class Robot:
         self.interface = brickpi.Interface()
         self.interface.initialize()
 
-        self.motors = {'R': {'port': Robot.MA, 'K_u': 750.0, 'P_u': 0.25},
-                       'L': {'port': Robot.MD, 'K_u': 750.0, 'P_u': 0.25}}
-
-        self.interface.motorEnable(self.motors['L']['port'])
-        self.interface.motorEnable(self.motors['R']['port'])
+        self.motors = {'R': {'port': Robot.MD, 'K_u': 750.0, 'P_u': 0.25, 'instance': None},
+                       'L': {'port': Robot.MA, 'K_u': 750.0, 'P_u': 0.25, 'instance': None}}
 
         for _, motor in self.motors.items():
-            k_p = 0.6 * motor['K_u']
-            # TODO: hack to not die
-            k_i = 2.0 * k_p / motor['P_u'] * 0.05
-            k_d = k_p * motor['P_u'] / 8.0
-            print('Motor {}: k_p = {:.2f} k_i = {:.2f} k_d = {:.2f}'.format(
-                motor, k_p, k_i, k_d))
-            motorParams = self.interface.MotorAngleControllerParameters()
-            motorParams.maxRotationAcceleration = 6.0
-            motorParams.maxRotationSpeed = 8.0
-            motorParams.feedForwardGain = 255 / 20.0
-            motorParams.minPWM = 30.0
-            motorParams.pidParameters.minOutput = -255
-            motorParams.pidParameters.maxOutput = 255
-            motorParams.pidParameters.k_p = k_p
-            motorParams.pidParameters.k_i = k_i
-            motorParams.pidParameters.k_d = k_d
-
-            self.interface.setMotorAngleControllerParameters(
-                motor['port'], motorParams)
+            motor['instance'] = Motor(self, motor)
 
         # setup bumper
         self.right_bumper = Bumper(self, Robot.S1)

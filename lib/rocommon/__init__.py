@@ -1,4 +1,6 @@
 # import robot class
 from robot import *
-# particle set and probabilistic robot
+# particle set
 from particles import *
+# probabilistic robot
+from probabilistic_robot import *
