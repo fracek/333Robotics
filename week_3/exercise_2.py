@@ -9,7 +9,7 @@ def parse_input(s):
         wp = ast.literal_eval(s)
         if type(wp) == list and len(wp) == 2:
             return wp
-    except SyntaxError:
+    except (SyntaxError, ValueError) as _:
         pass
     return None
 

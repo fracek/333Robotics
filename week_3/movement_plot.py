@@ -2,7 +2,6 @@ import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
 import numpy as np
 
-LOG_PATH = 'data/log_exercise_1.log'
 ALPHA = 0.5
 ARROW_WIDTH = 0.001
 DATA_POINTS = 20
@@ -16,7 +15,7 @@ def as_array(v):
     return np.squeeze(np.asarray(v))
 
 
-if __name__ == "__main__":
+def plot_movement(log, filename):
     _, ax = plt.subplots()
     ax.set_title('Probabilistic Robot Position Estimates')
 
@@ -46,7 +45,7 @@ if __name__ == "__main__":
     # starting point
     ax.plot(0, 0, 'o', color='white')
     # add particles
-    with open(LOG_PATH, 'r') as f:
+    with open(log, 'r') as f:
         for i, command in enumerate(f):
             # skip 'drawParticles: ' part
             data_as_str = command[15:]
@@ -73,4 +72,8 @@ if __name__ == "__main__":
             ax.quiver(as_array(mean_x[0]), as_array(mean_x[1]),
                       np.cos(as_array(mean_x[2])), np.sin(as_array(mean_x[2])),
                       color=cgen[i], width=5 * ARROW_WIDTH)
-    plt.savefig('position_estimates.pdf')
+    plt.savefig(filename)
+
+if __name__ == "__main__":
+    plot_movement('data/log_exercise_1.log', 'position_estimates.pdf')
+    plot_movement('data/log_exercise_1_wp.log', 'position_estimates_wp.pdf')
