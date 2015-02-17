@@ -4,3 +4,5 @@ from robot import *
 from particles import *
 # probabilistic robot
 from probabilistic_robot import *
+# maps
+from map import *

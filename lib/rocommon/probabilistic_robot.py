@@ -9,10 +9,11 @@ class ProbabilisticRobot(Robot):
     NUMBER_OF_PARTICLES = 100
     ANGLE_THRESHOLD = np.radians(2.0)
 
-    def __init__(self, e_sigma=0.03, f_sigma=0.01, g_sigma=0.03, use_spinning_sonar=False):
+    def __init__(self, e_sigma=0.03, f_sigma=0.01, g_sigma=0.03, use_spinning_sonar=False, map=None):
         Robot.__init__(self, use_spinning_sonar)
         self.ps = ParticleSet(
             ProbabilisticRobot.NUMBER_OF_PARTICLES, e_sigma, f_sigma, g_sigma)
+        self.map = map
 
     def move_forward(self, distance):
         Robot.move_forward(self, distance)
