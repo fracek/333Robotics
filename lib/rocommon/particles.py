@@ -34,3 +34,6 @@ class ParticleSet:
         self.x[:, 2] += alpha + g
 
         return self.x
+
+    def normalize(self):
+        self.w /= np.sum(self.w)
