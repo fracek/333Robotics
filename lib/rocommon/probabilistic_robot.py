@@ -9,10 +9,10 @@ class ProbabilisticRobot(Robot):
     NUMBER_OF_PARTICLES = 100
     ANGLE_THRESHOLD = np.radians(2.0)
 
-    def __init__(self, e_sigma=0.03, f_sigma=0.01, g_sigma=0.03, use_spinning_sonar=False, map=None):
+    def __init__(self, e_sigma=0.03, f_sigma=0.01, g_sigma=0.03, use_spinning_sonar=False, map=None, starting_x=[0, 0, 0]):
         Robot.__init__(self, use_spinning_sonar)
         self.ps = ParticleSet(
-            ProbabilisticRobot.NUMBER_OF_PARTICLES, e_sigma, f_sigma, g_sigma)
+            starting_x, ProbabilisticRobot.NUMBER_OF_PARTICLES, e_sigma, f_sigma, g_sigma)
         self.map = map
 
     def move_forward(self, distance):
@@ -39,6 +39,37 @@ class ProbabilisticRobot(Robot):
             self.turn(angle)
         distance = np.sqrt(np.sum(d ** 2))
         self.move_forward(distance)
+
+    def _compute_expected_depth(self, pos):
+        [x, y, theta] = pos
+        def compute_distance_from_wall(wall):
+            (Ax, Ay, Bx, By) = wall
+            num = (By - Ay) * (Ax - x) - (Bx - Ax) * (Ay - y)
+            den = (By - Ay) * np.cos(theta) - (Bx - Ax) * np.sin(theta)
+            m = num / den
+            if m <= 0:
+                return np.inf
+            # http://www.lucidarme.me/?p=1952
+            C = np.array([x + m * np.cos(theta), y + m * np.sin(theta)])
+            AB = [Bx - Ax, By - Ay]
+            AC = C - [Ax, Ay]
+            K_ac = np.dot(AB, AC)
+            K_ab = np.dot(AB, AB)
+            if 0 < K_ac < K_ab:
+                return m
+            return np.inf
+
+        distances = [compute_distance_from_wall(w) for w in self.map.walls]
+        print('distances = {}'.format(distances))
+
+    def _compute_likelihood(self, x, z):
+        m = self._compute_expected_depth(x)
+        return m
+
+    def update_measurement(self):
+        sonar_value = self.sonar.value()
+        if sonar_value and sonar_value is not 255:
+            likelihoods = [self._compute_likelihood(x, sonar_value) for x in self.ps.x]
 
     def draw_particles(self):
         canvas = Canvas()

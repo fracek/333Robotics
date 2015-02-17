@@ -3,7 +3,7 @@ import numpy as np
 
 class ParticleSet:
 
-    def __init__(self, particles_number, e_sigma, f_sigma, g_sigma):
+    def __init__(self, starting_x, particles_number, e_sigma, f_sigma, g_sigma):
         self.particles_number = particles_number
         self.mu = 0.0
         self.e_sigma = e_sigma
@@ -11,6 +11,7 @@ class ParticleSet:
         self.g_sigma = g_sigma
         # [x, y, theta]
         self.x = np.zeros([particles_number, 3])
+        self.x[0, :] = starting_x
         self.w = np.ones(particles_number) / particles_number
 
     def _normal(self, sigma):
