@@ -1,6 +1,7 @@
 import numpy as np
 from robot import Robot
 from particles import ParticleSet
+from canvas import Canvas
 
 
 class ProbabilisticRobot(Robot):
@@ -10,7 +11,8 @@ class ProbabilisticRobot(Robot):
 
     def __init__(self, e_sigma=0.03, f_sigma=0.01, g_sigma=0.03, use_spinning_sonar=False):
         Robot.__init__(self, use_spinning_sonar)
-        self.ps = ParticleSet(ProbabilisticRobot.NUMBER_OF_PARTICLES, e_sigma, f_sigma, g_sigma)
+        self.ps = ParticleSet(
+            ProbabilisticRobot.NUMBER_OF_PARTICLES, e_sigma, f_sigma, g_sigma)
 
     def move_forward(self, distance):
         Robot.move_forward(self, distance)
@@ -38,6 +40,5 @@ class ProbabilisticRobot(Robot):
         self.move_forward(distance)
 
     def draw_particles(self):
-        particles = 2.0 * self.ps.x + [500.0, 250.0, 0.0]
-        particles_list = [(r[0], r[1], r[2]) for r in particles]
-        print('drawParticles: {}'.format(particles_list))
+        canvas = Canvas()
+        canvas.draw_particles(self.ps.x)

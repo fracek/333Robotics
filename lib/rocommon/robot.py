@@ -47,6 +47,7 @@ class Motor:
         print('Angles = {}'.format(angles))
         return angles
 
+
 class Bumper:
 
     def __init__(self, owner, port):
