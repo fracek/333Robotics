@@ -73,7 +73,7 @@ class ProbabilisticRobot(Robot):
         print('distances = {}'.format(distances))
 
     def _compute_likelihood(self, x, z):
-        m = self._compute_expected_depth(x)
+        m = np.min(self._compute_expected_depth(x))
         return m
 
     def update_measurement(self):
