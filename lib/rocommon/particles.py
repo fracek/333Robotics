@@ -37,3 +37,22 @@ class ParticleSet:
 
     def normalize(self):
         self.w /= np.sum(self.w)
+
+    def resample(self):
+        """
+        Implementation of resampling wheel: https://www.udacity.com/course/viewer#!/c-cs373/l-48704330
+        """
+        index = int(np.random.rand() * self.particles_number)
+        beta = 0
+        max_weight = max(self.w)
+        new_x = np.tile([0, 0, 0], (self.particles_number, 1))
+        new_w = np.zeros(self.particles_number)
+        for i in xrange(self.particles_number):
+            beta += np.random.rand() * 2.0 * max_weight
+            while self.w[index] < beta:
+                beta -= self.w[index]
+                index = (index + 1) % self.particles_number
+            new_x[i] = self.x[index]
+            new_w[i] = self.w[index]
+        self.x = new_x
+        self.w = new_w
