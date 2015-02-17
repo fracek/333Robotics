@@ -19,15 +19,12 @@ class ParticleSet:
     def predict_move(self, distance):
         e = self._normal(self.e_sigma)
         f = self._normal(self.f_sigma)
-        print('e = {}'.format(e))
-        print('f = {}'.format(f))
         # x
         self.x[:, 0] += (distance + e) * np.cos(self.x[:, 2])
         # y
         self.x[:, 1] += (distance + e) * np.sin(self.x[:, 2])
         # theta
         self.x[:, 2] += f
-        print(self.x)
 
         return self.x
 
