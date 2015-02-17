@@ -10,8 +10,8 @@ class ParticleSet:
         self.f_sigma = f_sigma
         self.g_sigma = g_sigma
         # [x, y, theta]
-        self.x = np.zeros([particles_number, 3])
-        self.x[0, :] = starting_x
+        #self.x = np.zeros([particles_number, 3])
+        self.x = np.tile(starting_x, (particles_number, 1))
         self.w = np.ones(particles_number) / particles_number
 
     def _normal(self, sigma):
