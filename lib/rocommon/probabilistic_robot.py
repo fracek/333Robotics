@@ -70,10 +70,12 @@ class ProbabilisticRobot(Robot):
             return np.inf
 
         distances = [compute_distance_from_wall(w) for w in self.map.walls]
-        print('distances = {}'.format(distances))
+        # TODO: check for crap values
+        return np.min(distances)
 
     def _compute_likelihood(self, x, z):
-        m = np.min(self._compute_expected_depth(x))
+        m = self._compute_expected_depth(x)
+        print('m = {}, z = {}'.format(m, z))
         return m
 
     def update_measurement(self):
