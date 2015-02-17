@@ -2,11 +2,12 @@ import numpy as np
 from robot import Robot
 from particles import ParticleSet
 
+
 class ProbabilisticRobot(Robot):
 
     NUMBER_OF_PARTICLES = 100
 
-    def __init__(self, e_sigma=0.5, f_sigma=0.1, g_sigma=0.5, use_spinning_sonar=False):
+    def __init__(self, e_sigma=0.055, f_sigma=0.1, g_sigma=0.5, use_spinning_sonar=False):
         Robot.__init__(self, use_spinning_sonar)
         self.ps = ParticleSet(ProbabilisticRobot.NUMBER_OF_PARTICLES, e_sigma, f_sigma, g_sigma)
 
@@ -31,6 +32,7 @@ class ProbabilisticRobot(Robot):
             angle -= np.sign(angle) * 2.0 * np.pi
         self.turn(angle)
         distance = np.sqrt(np.sum(d ** 2))
+        print('Moving from {} to {}. d = {}'.format(mean_x[:2], wp, distance))
         self.move_forward(distance)
 
     def draw_particles(self):
