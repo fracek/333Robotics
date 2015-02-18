@@ -1,3 +1,6 @@
+import numpy as np
+
+
 class Canvas:
 
     def __init__(self, map_size=210):
@@ -13,9 +16,9 @@ class Canvas:
         y2 = self._screenY(line[3])
         print "drawLine:" + str((x1, y1, x2, y2))
 
-    def draw_particles(self, data):
-        display = [(self._screenX(d[0]), self._screenY(d[1])) + tuple(d[2:])
-                   for d in data]
+    def draw_particles(self, data, w=[]):
+        display = [(self._screenX(d[0]), self._screenY(d[1])) + tuple(np.concatenate((d[2:], w)))
+                for d in data]
         print "drawParticles:" + str(display)
 
     def _screenX(self, x):

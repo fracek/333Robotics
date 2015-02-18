@@ -46,7 +46,10 @@ class ProbabilisticRobot(Robot):
         if sonar_value and sonar_value is not 255:
             likelihoods = [
                 lh.compute_likelihood(x, sonar_value, self.map.walls) for x in self.ps.x]
+            self.ps.w *= likelihoods
+            self.ps.normalize()
+            self.ps.resample()
 
     def draw_particles(self):
         canvas = Canvas()
-        canvas.draw_particles(self.ps.x)
+        canvas.draw_particles(self.ps.x, self.ps.w)
