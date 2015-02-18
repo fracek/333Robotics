@@ -45,14 +45,12 @@ class ParticleSet:
         index = int(np.random.rand() * self.particles_number)
         beta = 0
         max_weight = max(self.w)
-        new_x = np.tile([0, 0, 0], (self.particles_number, 1))
-        new_w = np.zeros(self.particles_number)
+        new_x = np.zeros((self.particles_number, 3))
         for i in xrange(self.particles_number):
             beta += np.random.rand() * 2.0 * max_weight
             while self.w[index] < beta:
                 beta -= self.w[index]
                 index = (index + 1) % self.particles_number
             new_x[i] = self.x[index]
-            new_w[i] = self.w[index]
         self.x = new_x
-        self.w = new_w
+        self.w = np.ones(len(self.w)) / len(self.w)
