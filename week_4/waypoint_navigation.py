@@ -1,6 +1,7 @@
 import sys
 sys.path.append('../lib')
 import rocommon
+import time
 
 STEP_DISTANCE = 10
 WAYPOINTS = [
@@ -21,6 +22,8 @@ if __name__ == "__main__":
                 map=lab_map, starting_x=[84.0, 30.0, 0.0])
         for wp in WAYPOINTS:
             robot.move_to_waypoint(wp)
+            robot.draw_particles()
+            time.sleep(2.0)
             robot.update_measurement()
             robot.draw_particles()
     except KeyboardInterrupt:

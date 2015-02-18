@@ -9,11 +9,14 @@ class ProbabilisticRobot(Robot):
 
     NUMBER_OF_PARTICLES = 100
     ANGLE_THRESHOLD = np.radians(2.0)
+    SONAR_READINGS_THRESHOLD = 30
 
-    def __init__(self, e_sigma=0.03, f_sigma=0.01, g_sigma=0.03, use_spinning_sonar=False, map=None, starting_x=[0, 0, 0]):
+    def __init__(self, e_sigma=0.03, f_sigma=0.01, g_sigma=0.03,
+                 use_spinning_sonar=False, map=None, starting_x=[0, 0, 0]):
         Robot.__init__(self, use_spinning_sonar)
         self.ps = ParticleSet(
-            starting_x, ProbabilisticRobot.NUMBER_OF_PARTICLES, e_sigma, f_sigma, g_sigma)
+            starting_x, ProbabilisticRobot.NUMBER_OF_PARTICLES,
+            e_sigma, f_sigma, g_sigma)
         self.map = map
 
     def move_forward(self, distance):
@@ -44,11 +47,14 @@ class ProbabilisticRobot(Robot):
     def update_measurement(self):
         sonar_value = self.sonar.value()
         if sonar_value and sonar_value is not 255:
-            likelihoods = [
-                lh.compute_likelihood(x, sonar_value, self.map.walls) for x in self.ps.x]
-            self.ps.w *= likelihoods
-            self.ps.normalize()
-            self.ps.resample()
+            distances = np.array([lh.compute_expected_depth(x, self.map.walls)
+                         for x in self.ps.x])
+            if np.sum(np.isinf(distances)) < ProbabilisticRobot.SONAR_READINGS_THRESHOLD:
+                likelihoods = [lh.compute_likelihood(d, sonar_value, self.map.walls)
+                               for d in distances]
+                self.ps.w *= likelihoods
+                self.ps.normalize()
+                self.ps.resample()
 
     def draw_particles(self):
         canvas = Canvas()

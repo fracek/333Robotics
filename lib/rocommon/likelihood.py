@@ -36,11 +36,9 @@ def compute_expected_depth(pos, walls):
     return np.min(distances)
 
 
-def compute_likelihood(x, z, walls):
-    m = compute_expected_depth(x, walls)
+def compute_likelihood(m, z, walls):
     # TODO: USE REAL CONSTANTS NOT THIS CRAP
     sigma = 0.5
     k = 0.1
     p = np.exp(-np.square(z - m) / (2.0 * np.square(sigma))) + k
-    print('m = {}, z = {}, p = {}'.format(m, z, p))
     return p
