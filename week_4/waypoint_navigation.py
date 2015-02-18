@@ -3,7 +3,6 @@ sys.path.append('../lib')
 import rocommon
 import time
 
-STEP_DISTANCE = 10
 WAYPOINTS = [
         [180, 30],
         [180, 54],
