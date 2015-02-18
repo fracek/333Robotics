@@ -2,17 +2,18 @@ from canvas import Canvas
 import ast
 import os
 
+
 class Map:
+
     def __init__(self, filename):
-        self.walls = [];
+        self.walls = []
         self.read_from_file(filename)
 
-    def add_wall(self,wall):
-        self.walls.append(wall);
+    def add_wall(self, wall):
+        self.walls.append(wall)
 
     def clear(self):
-        self.walls = [];
-
+        self.walls = []
 
     def _parse_wall_line(self, s):
         try:
@@ -36,7 +37,7 @@ class Map:
     def draw(self):
         canvas = Canvas()
         for wall in self.walls:
-            canvas.draw_line(wall);
+            canvas.draw_line(wall)
 
 
 class LabMap(Map):
