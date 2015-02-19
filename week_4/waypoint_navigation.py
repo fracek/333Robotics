@@ -18,7 +18,8 @@ if __name__ == "__main__":
         lab_map = rocommon.LabMap()
         lab_map.draw()
         robot = rocommon.ProbabilisticRobot(
-                map=lab_map, starting_x=[84.0, 30.0, 0.0])
+                map=lab_map, starting_x=[84.0, 30.0, 0.0],
+                e_sigma=0.1, f_sigma=0.05, g_sigma=0.1)
         for wp in WAYPOINTS:
             robot.move_to_waypoint(wp)
             robot.draw_particles()
