@@ -38,12 +38,6 @@ class ParticleSet:
     def normalize(self):
         self.w /= np.sum(self.w)
 
-    def __resample(self):
-        best_x = self.x[self.w > np.median(self.w)]
-        self.x = np.vstack((best_x, best_x))
-        self.x = self.x[0:100, :]
-        self.w = np.ones(len(self.w)) / len(self.w)
-
     def resample(self):
         """
         Implementation of resampling wheel: https://www.udacity.com/course/viewer#!/c-cs373/l-48704330

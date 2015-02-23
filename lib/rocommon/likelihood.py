@@ -12,9 +12,9 @@ def compute_expected_depth(pos, walls):
         den = np.sqrt(np.square(Ay - By) + np.square(Bx - Ax))
         beta = np.arccos(num / den)
         if np.abs(beta) > np.pi / 4.0:
-            return np.inf
+            return np.nan
 
-        # Compute distanec between sonar and wall
+        # Compute distance between sonar and wall
         num = (By - Ay) * (Ax - x) - (Bx - Ax) * (Ay - y)
         den = (By - Ay) * np.cos(theta) - (Bx - Ax) * np.sin(theta)
         m = num / den
@@ -32,13 +32,29 @@ def compute_expected_depth(pos, walls):
         return np.inf
 
     distances = [compute_distance_from_wall(w) for w in walls]
-    # TODO: check for crap values
     return np.min(distances)
 
 
-def compute_likelihood(m, z, walls):
-    # TODO: USE REAL CONSTANTS NOT THIS CRAP
-    sigma = 0.5
+def compute_likelihood(m, z):
+    # In the case when the sonar angle is not optimal (m == nan) it is very likely
+    # to get a bad reading from the sonar (z == 255)
+    if np.isnan(m):
+        if z == 255:
+            return 0.8
+        else:
+            m = np.inf
+
     k = 0.1
+    sigma = 0.5
     p = np.exp(-np.square(z - m) / (2.0 * np.square(sigma))) + k
+
+    # The likelihood of getting bad readings is greater when outside the optimal
+    # sensor range (20 < m < 120). This means that getting a bad reading is not
+    # necessarily a bad thing, and could be a good sign if the nearest wall is
+    # very close or very far away.
+    if m < 20 and (z < m or z == 255):
+        p += 0.8
+    elif m > 120 and z > m:
+        p += 0.8
+
     return p
