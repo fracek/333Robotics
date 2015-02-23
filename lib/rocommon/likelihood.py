@@ -36,25 +36,27 @@ def compute_expected_depth(pos, walls):
 
 
 def compute_likelihood(m, z):
+    K = 0.1
     # In the case when the sonar angle is not optimal (m == nan) it is very likely
     # to get a bad reading from the sonar (z == 255)
     if np.isnan(m):
         if z == 255:
             return 0.8
         else:
-            m = np.inf
+            return K
 
-    k = 0.1
     sigma = 0.5
-    p = np.exp(-np.square(z - m) / (2.0 * np.square(sigma))) + k
+    p = np.exp(-np.square(z - m) / (2.0 * np.square(sigma))) + K
 
     # The likelihood of getting bad readings is greater when outside the optimal
     # sensor range (20 < m < 120). This means that getting a bad reading is not
     # necessarily a bad thing, and could be a good sign if the nearest wall is
     # very close or very far away.
-    if m < 20 and (z < m or z == 255):
+    MIN_RANGE = 20.0
+    MAX_RANGE = 120.0
+    if m < MIN_RANGE and (z < MIN_RANGE or z == 255):
         p += 0.8
-    elif m > 120 and z > m:
+    elif m > MAX_RANGE and z > MAX_RANGE:
         p += 0.8
 
     return p
