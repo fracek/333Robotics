@@ -57,7 +57,10 @@ class ProbabilisticRobot(Robot):
             self.turn(angle)
 
         while distance > 0:
-            self.move_forward(step)
+            if step < distance:
+                self.move_forward(step)
+            else:
+                self.move_forward(distance)
             distance -= step
 
             self.update_measurement()
