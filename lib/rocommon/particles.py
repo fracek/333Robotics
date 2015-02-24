@@ -1,4 +1,5 @@
 import numpy as np
+import bisect
 
 
 class ParticleSet:
@@ -39,18 +40,13 @@ class ParticleSet:
         self.w /= np.sum(self.w)
 
     def resample(self):
-        """
-        Implementation of resampling wheel: https://www.udacity.com/course/viewer#!/c-cs373/l-48704330
-        """
-        index = int(np.random.rand() * self.particles_number)
-        beta = 0
-        max_weight = max(self.w)
+        cum_w = np.cumsum(self.w)
+        max_w = cum_w[-1]
         new_x = np.zeros((self.particles_number, 3))
-        for i in xrange(self.particles_number):
-            beta += np.random.rand() * 2.0 * max_weight
-            while self.w[index] < beta:
-                beta -= self.w[index]
-                index = (index + 1) % self.particles_number
-            new_x[i] = self.x[index]
+        for i in xrange(new_x.shape[0]):
+            x = np.random.uniform(0, max_w)
+            idx = bisect.bisect(cum_w, x)
+            new_x[i] = self.x[idx, :]
         self.x = new_x
+        # New points all have weight 1/N
         self.w = np.ones(len(self.w)) / len(self.w)
