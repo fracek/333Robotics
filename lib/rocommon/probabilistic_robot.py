@@ -47,10 +47,9 @@ class ProbabilisticRobot(Robot):
     def update_measurement(self):
         sonar_value = self.sonar.value()
         if sonar_value:
-            # TODO: should we do anything if we have bad distances?
             distances = np.array([lh.compute_expected_depth(x, self.map.walls)
                                   for x in self.ps.x])
-            bad_distances = np.isinf(distances) + np.isnan(distances)
+            bad_distances = np.isinf(distances)
             if np.sum(bad_distances) < ProbabilisticRobot.SONAR_READINGS_THRESHOLD:
                 likelihoods = [lh.compute_likelihood(d, sonar_value)
                                for d in distances]
