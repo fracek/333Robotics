@@ -51,8 +51,8 @@ class ProbabilisticRobot(Robot):
                                   for x in self.ps.x])
             bad_distances = np.isinf(distances)
             if np.sum(bad_distances) < ProbabilisticRobot.SONAR_READINGS_THRESHOLD:
-                likelihoods = [lh.compute_likelihood(d, sonar_value)
-                               for d in distances]
+                likelihoods = [lh.compute_likelihood(d, a, sonar_value)
+                               for d, a in distances]
                 self.ps.w *= likelihoods
                 self.ps.normalize()
                 self.ps.resample()

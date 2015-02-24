@@ -5,7 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 def likelihood(m, z):
-    p = [lh.compute_likelihood(m, x) for x in z]
+    p = [lh.compute_likelihood(m, 1.0 * np.isinf(x), x) for x in z]
     return p
 
 def plot(z, p, m):
@@ -14,7 +14,7 @@ def plot(z, p, m):
 
 if __name__ == "__main__":
     z = np.linspace(0.0, 255.0, 400)
-    for i, m in enumerate([15.0, 40.0, 60.0, 80.0, 150.0, np.nan]):
+    for i, m in enumerate([15.0, 40.0, 60.0, 80.0, 150.0, np.inf]):
         p = likelihood(m, z)
         plt.subplot(3, 2, i)
         plt.plot(z, p, color='k')
