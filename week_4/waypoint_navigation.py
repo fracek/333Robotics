@@ -22,8 +22,7 @@ if __name__ == "__main__":
 
         if GOOD_ODOMETRY:
             robot = rocommon.ProbabilisticRobot(
-                    map=lab_map, starting_x=[84.0, 30.0, 0.0],
-                    e_sigma=0.1, f_sigma=0.05, g_sigma=0.1)
+                    map=lab_map, starting_x=[84.0, 30.0, 0.0])
         else:
             robot = rocommon.ProbabilisticRobot(
                     map=lab_map, starting_x=[84.0, 30.0, 0.0],
