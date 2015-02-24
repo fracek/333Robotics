@@ -54,9 +54,9 @@ def compute_likelihood(m, z):
     # very close or very far away.
     MIN_RANGE = 20.0
     MAX_RANGE = 120.0
-    if m < MIN_RANGE and (z < MIN_RANGE or z == 255):
+    if m < MIN_RANGE and z == 255:
         p += 0.8
-    elif m > MAX_RANGE and z > MAX_RANGE:
+    elif m > MAX_RANGE and z == 255:
         p += 0.8
 
     return p
