@@ -36,7 +36,7 @@ def compute_expected_depth(pos, walls):
 def compute_likelihood(m, a, z):
     K = 0.1
 
-    sigma = 0.5
+    sigma = 3.5
     p = np.exp(-np.square(z - m) / (2.0 * np.square(sigma))) + K
 
     # The likelihood of getting bad readings is greater when outside the optimal
