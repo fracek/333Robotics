@@ -60,8 +60,6 @@ class ProbabilisticRobot(Robot):
             self.move_forward(step)
             distance -= step
 
-            self.draw_particles()
-            time.sleep(1.0)
             self.update_measurement()
             self.draw_particles()
 
