@@ -1,7 +1,6 @@
 import sys
 sys.path.append('../lib')
 import rocommon
-import time
 
 WAYPOINTS = [
         [180, 30],
@@ -29,11 +28,7 @@ if __name__ == "__main__":
                     e_sigma=0.15, f_sigma=0.05, g_sigma=0.15)
 
         for wp in WAYPOINTS:
-            robot.move_to_waypoint(wp)
-            robot.draw_particles()
-            time.sleep(2.0)
-            robot.update_measurement()
-            robot.draw_particles()
+            robot.move_to_waypoint_with_step(wp, 20.0)
     except KeyboardInterrupt:
         pass
     robot.implode()

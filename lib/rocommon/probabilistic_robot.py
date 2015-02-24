@@ -1,4 +1,5 @@
 import numpy as np
+import time
 from robot import Robot
 from particles import ParticleSet
 from canvas import Canvas
@@ -31,18 +32,39 @@ class ProbabilisticRobot(Robot):
         mean_x = np.sum(self.ps.x.T * self.ps.w, axis=1)
         return mean_x
 
-    def move_to_waypoint(self, wp):
+    def _compute_distance_angle(self, wp):
         mean_x = self.position_estimate()
         d = wp - mean_x[:2]
         abs_angle = np.arctan2(d[1], d[0])
         angle = abs_angle - mean_x[2]
         if abs(angle) > np.pi:
             angle -= np.sign(angle) * 2.0 * np.pi
-        # Avoid updating particle when not turning
+
+        distance = np.sqrt(np.sum(d ** 2))
+        return distance, angle
+
+    def move_to_waypoint(self, wp):
+        distance, angle = self._compute_distance_angle(wp)
+
         if abs(angle) > ProbabilisticRobot.ANGLE_THRESHOLD:
             self.turn(angle)
-        distance = np.sqrt(np.sum(d ** 2))
         self.move_forward(distance)
+
+    def move_to_waypoint_with_step(self, wp, step):
+        distance, angle = self._compute_distance_angle(wp)
+
+        if abs(angle) > ProbabilisticRobot.ANGLE_THRESHOLD:
+            self.turn(angle)
+
+        while distance > 0:
+            if step < distance:
+                self.move_forward(step)
+            else:
+                self.move_forward(distance)
+            distance -= step
+
+            self.update_measurement()
+            self.draw_particles()
 
     def update_measurement(self):
         sonar_value = self.sonar.value()
@@ -51,8 +73,8 @@ class ProbabilisticRobot(Robot):
                                   for x in self.ps.x])
             bad_distances = np.isinf(distances)
             if np.sum(bad_distances) < ProbabilisticRobot.SONAR_READINGS_THRESHOLD:
-                likelihoods = [lh.compute_likelihood(d, sonar_value)
-                               for d in distances]
+                likelihoods = [lh.compute_likelihood(d, a, sonar_value)
+                               for d, a in distances]
                 self.ps.w *= likelihoods
                 self.ps.normalize()
                 self.ps.resample()
