@@ -26,7 +26,7 @@ if __name__ == "__main__":
         else:
             robot = rocommon.ProbabilisticRobot(
                     map=lab_map, starting_x=[84.0, 30.0, 0.0],
-                    e_sigma=1.0, f_sigma=0.50, g_sigma=1.0)
+                    e_sigma=0.15, f_sigma=0.05, g_sigma=0.15)
 
         for wp in WAYPOINTS:
             robot.move_to_waypoint(wp)
