@@ -30,7 +30,7 @@ def compute_expected_depth(pos, walls):
         return np.inf, beta
 
     distances_and_angles = [compute_distance_from_wall(w) for w in walls]
-    return min(distances_and_angles, key=lambda k,v: k)
+    return min(distances_and_angles, key=lambda e: e[0])
 
 
 def compute_likelihood(m, a, z):
