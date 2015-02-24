@@ -11,8 +11,6 @@ def compute_expected_depth(pos, walls):
         num = np.cos(theta) * (Ay - By) + np.sin(theta) * (Bx - Ax)
         den = np.sqrt(np.square(Ay - By) + np.square(Bx - Ax))
         beta = np.arccos(num / den)
-        if np.abs(beta) > np.pi / 4.0:
-            return np.nan
 
         # Compute distance between sonar and wall
         num = (By - Ay) * (Ax - x) - (Bx - Ax) * (Ay - y)
@@ -27,23 +25,16 @@ def compute_expected_depth(pos, walls):
         K_ac = np.dot(AB, AC)
         K_ab = np.dot(AB, AB)
         if (0 < K_ac < K_ab) and m >= 0:
-            return m
+            return m, beta
 
-        return np.inf
+        return np.inf, beta
 
-    distances = [compute_distance_from_wall(w) for w in walls]
-    return np.min(distances)
+    distances_and_angles = [compute_distance_from_wall(w) for w in walls]
+    return min(distances_and_angles, key=lambda k,v: k)
 
 
-def compute_likelihood(m, z):
+def compute_likelihood(m, a, z):
     K = 0.1
-    # In the case when the sonar angle is not optimal (m == nan) it is very likely
-    # to get a bad reading from the sonar (z == 255)
-    if np.isnan(m):
-        if z == 255:
-            return 0.8
-        else:
-            return K
 
     sigma = 0.5
     p = np.exp(-np.square(z - m) / (2.0 * np.square(sigma))) + K
@@ -58,5 +49,13 @@ def compute_likelihood(m, z):
         p += 0.8
     elif m > MAX_RANGE and z == 255:
         p += 0.8
+
+    # In the case when the sonar angle is not optimal (a > pi/4) it is very likely
+    # to get a bad reading from the sonar (z == 255)
+    if np.abs(a) > np.pi / 4:
+        if z == 255:
+            p = 0.8
+        else:
+            p = K
 
     return p
