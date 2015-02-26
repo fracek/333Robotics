@@ -5,7 +5,7 @@ import numpy as np
 
 
 def learn_location(container, robot):
-    ls = rocommon.LocationSignature()
+    ls = rocommon.LocationSignature(no_bins = 20)
 
     num_bins = len(ls.sig)
     for i in range(num_bins):
