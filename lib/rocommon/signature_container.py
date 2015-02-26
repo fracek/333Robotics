@@ -7,6 +7,7 @@ class LocationSignature:
 
     def __init__(self, no_bins=360):
         self.sig = [0] * no_bins
+        self.idx = 0
 
     def print_signature(self):
         for i in range(len(self.sig)):
@@ -17,14 +18,15 @@ class LocationSignature:
 
 class SignatureContainer():
 
-    def __init__(self, size=5):
+    def __init__(self, size=5, path='', no_bins=360):
         self.size = size  # max number of signatures that can be stored
         self.filenames = []
+        self.no_bins = no_bins
 
         # Fills the filenames variable with names like loc_%%.dat
         # where %% are 2 digits (00, 01, 02...) indicating the location number.
         for i in range(self.size):
-            self.filenames.append('loc_{0:02d}.dat'.format(i))
+            self.filenames.append(path + 'loc_{0:02d}.dat'.format(i))
 
     # Get the index of a filename for the new signature. If all filenames are
     # used, it returns -1;
@@ -64,14 +66,15 @@ class SignatureContainer():
     # Read signature file identified by index. If the file doesn't exist
     # it returns an empty signature.
     def read(self, index):
-        ls = LocationSignature()
+        ls = LocationSignature(no_bins=self.no_bins)
+        ls.idx = index + 1
         filename = self.filenames[index]
         if os.path.isfile(filename):
             f = open(filename, 'r')
             for i in range(len(ls.sig)):
                 s = f.readline()
                 if (s != ''):
-                    ls.sig[i] = int(s)
+                    ls.sig[i] = int(float(s))
             f.close()
         else:
             print "WARNING: Signature does not exist."
