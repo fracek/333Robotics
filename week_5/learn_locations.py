@@ -5,7 +5,7 @@ import numpy as np
 
 
 def learn_location(container, robot):
-    ls = rocommon.LocationSignature(no_bins = 20)
+    ls = rocommon.LocationSignature(no_bins = 72)
 
     num_bins = len(ls.sig)
     for i in range(num_bins):
@@ -13,6 +13,7 @@ def learn_location(container, robot):
         robot.sonar.rotate_by(2.0 * np.pi / float(num_bins))
         sonar_value = robot.sonar.value()
         ls.sig[i] = sonar_value
+    robot.sonar.rotate_by(-2.0 * np.pi)
 
     idx = container.get_free_index()
     if idx == -1:
@@ -28,6 +29,7 @@ if __name__ == "__main__":
         container.delete_loc_files()
         for _ in xrange(0, 5):
             learn_location(container, robot)
+            i = raw_input('press any key to continue...')
     except KeyboardInterrupt:
         pass
     robot.implode()
