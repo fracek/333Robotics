@@ -6,3 +6,5 @@ from particles import *
 from probabilistic_robot import *
 # maps
 from map import *
+# signature location
+from signature_container import *

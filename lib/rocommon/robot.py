@@ -47,6 +47,13 @@ class Motor:
         print('Angles = {}'.format(angles))
         return angles
 
+    def rotate_by(self, angle):
+        self.owner.interface.increaseMotorAngleReferences(
+            [self.parameters['port']], [angle])
+
+    def angle_references_reached(self):
+        return self.owner.interface.motorAngleReferencesReached([self.parameters['port']])
+
 
 class Bumper:
 
@@ -92,15 +99,21 @@ class SpinningSonar(Sonar):
     def __init__(self, owner, sonarPort, motorPort):
         Sonar.__init__(self, owner, sonarPort)
 
-        self.motorPort = motorPort
-        owner.interface.motorEnable(motorPort)
-        # TODO: setup motor parameters
+        self.motor = Motor(owner, {'port': motorPort, 'K_u': 750.0, 'P_u': 0.25})
 
     def rotate_to(self, angle):
         pass
 
+    def wait_until_done(self):
+        while not self.motor.angle_references_reached():
+            time.sleep(0.1)
+
+    @wait_references_reached
+    def rotate_by(self, angle):
+        self.motor.rotate_by(angle)
+
     def __str__(self):
-        return 'SpinningSonar(owner = {}, sonarPort = {}, motorPort = {})'.format(self.owner, self.sonarPort, self.motorPort)
+        return 'SpinningSonar(owner = {}, sonarPort = {})'.format(self.owner, self.sonarPort)
 
 
 class Robot:
