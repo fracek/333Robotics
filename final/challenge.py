@@ -22,10 +22,22 @@ if __name__ == "__main__":
         robot = rocommon.FinalRobot(map=ch_map)
         robot.load_all_locations()
         # start by guessing where we are
-        #loc, angle = robot.guess_location()
-        loc = 0
-        angle = -np.pi/2.0
-        robot.set_starting_location(STARTING_POINTS[loc], angle)
+        loc, angle = robot.guess_location()
+        print('loc = {}, angle = {}'.format(loc, angle))
+        if loc is not 1:
+            robot.set_starting_location([0.0, 0.0], angle)
+            robot.move_to_waypoint([0.0, 21.0 - 63.0])
+            robot.sonar.rotate_by(0.5 * np.pi)
+            sonar_value = robot.sonar.value()
+            print('Sonar reading = {}'.format(sonar_value))
+            if sonar_value < 50:
+                loc = 0
+            else:
+                loc = 2
+        else:
+            robot.set_starting_location(STARTING_POINTS[loc], angle)
+        print('location = {}'.format(loc))
+
         # rotate and set rotation
         for wp in WAYPOINTS[loc]:
             robot.move_to_waypoint(wp)

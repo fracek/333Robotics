@@ -47,9 +47,15 @@ class FinalRobot(ProbabilisticRobot):
         sig = self.location_sig()
         min_idx = None
         min_err = np.inf
+        min_shift = None
+        min_errors = []
         for shift in range(0, self.num_bins):
-            errors = np.sum((self.signatures - np.roll(sig, shift))**2, axis=1)
+            errors = np.sum(np.log((self.signatures - np.roll(sig, shift))**2 + 1.0), axis=1)
             if np.min(errors) < min_err:
                 min_idx = np.argmin(errors)
+                min_shift = shift
                 min_err = np.min(errors)
-        return min_idx
+                min_errors = errors
+        angle = (2.0 * np.pi) - (2.0 * np.pi * float(min_shift) / float(self.num_bins))
+        print('min_errors = {}'.format(min_errors))
+        return min_idx, angle
