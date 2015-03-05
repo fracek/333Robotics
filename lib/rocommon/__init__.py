@@ -8,3 +8,5 @@ from probabilistic_robot import *
 from map import *
 # signature location
 from signature_container import *
+# final robo
+from final_robot import *
