@@ -15,6 +15,10 @@ class FinalRobot(ProbabilisticRobot):
         self.sig_location = sig_location
         self.signatures = np.zeros((num_sig, num_bins))
 
+    def set_starting_location(self, loc, angle):
+        loc.append(angle)
+        self.ps.x = np.tile(loc, (self.ps.particles_number, 1))
+
     def location_sig(self):
         sig = np.zeros(self.num_bins)
         for i in range(self.num_bins):
