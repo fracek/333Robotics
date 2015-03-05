@@ -3,7 +3,7 @@ import numpy as np
 
 class Canvas:
 
-    def __init__(self, map_size=210):
+    def __init__(self, map_size=546):
         self.map_size = map_size  # in cm
         self.canvas_size = 768    # in pixels
         self.margin = 0.05 * map_size

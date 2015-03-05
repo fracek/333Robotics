@@ -16,7 +16,10 @@ WAYPOINTS = [
 
 if __name__ == "__main__":
     try:
-        robot = rocommon.FinalRobot()
+        ch_map = rocommon.ChallengeMap()
+        ch_map.draw()
+
+        robot = rocommon.FinalRobot(map=ch_map)
         robot.load_all_locations()
         # start by guessing where we are
         #loc, angle = robot.guess_location()
