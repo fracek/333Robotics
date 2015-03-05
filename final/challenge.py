@@ -3,7 +3,7 @@ sys.path.append('../lib')
 import rocommon
 import numpy as np
 
-STARTING_POINTS = [[21, 21], [273, 63], [525, 21]]
+STARTING_POINTS = [[21, 21], [273, 21], [525, 21]]
 WAYPOINTS = np.array([
 #    0                     1                     2
   [21, 63],            [273, 63],            [525, 63],
@@ -13,7 +13,7 @@ WAYPOINTS = np.array([
 
 WAYPOINTS_FOR_STARTING_LOC = [
   [4, 5, 6, 7, 2, 7, 6, 5, 1, 5, 4, 3, 0], # loc = 0, we start in 3
-  [5, 6, 7, 2, 7, 6, 5, 4, 3, 0, 3, 4, 5, 1], # loc = 1
+  [6, 7, 2, 7, 6, 5, 4, 3, 0, 3, 4, 5, 1], # loc = 1, we start in 5
   [6, 5, 4, 3, 0, 3, 4, 5, 1, 5, 6, 7, 2] # loc = 2, we start in 7
 ]
 
@@ -26,21 +26,23 @@ def wp_coincide(w1, w2):
 def guess_starting_location(robot):
     # start by guessing where we are
     loc, angle = robot.guess_location()
-    #print('loc = {}, angle = {}'.format(loc, angle))
-    if loc is not 1:
-        # WARNING: using different coordinates than the real map
-        robot.set_starting_location([0.0, 0.0], angle)
-        robot.move_to_waypoint([0.0, 21.0 - 63.0])
-        robot.sonar.rotate_by(H_PI)
-        sonar_value = robot.sonar.value()
-        #print('Sonar reading = {}'.format(sonar_value))
-        angle = -H_PI
-        # TODO: check by loc, don't turn in 2
-        robot.sonar.rotate_by(angle)
-        if sonar_value < 50:
-            loc = 0
-        else:
-            loc = 2
+    # WARNING: using different coordinates than the real map
+    # moving outside
+    robot.set_starting_location([0.0, 0.0], angle)
+    robot.move_to_waypoint([0.0, 21.0 - 63.0])
+    robot.sonar.rotate_by(H_PI)
+    sonar_value_r = robot.sonar.value()
+    robot.sonar.rotate_by(-np.pi)
+    sonar_value_l = robot.sonar.value()
+    robot.sonar.rotate_by(H_PI)
+    print('readings: r = {}, l = {}'.format(sonar_value_r, sonar_value_l))
+    angle = - H_PI
+    if sonar_value_r < 50:
+        loc = 0
+    elif sonar_value_l < 50:
+        loc = 2
+    else:
+        loc = 1
     return loc, angle
 
 if __name__ == "__main__":
@@ -52,6 +54,7 @@ if __name__ == "__main__":
         robot.load_all_locations()
 
         loc, angle = guess_starting_location(robot)
+        print('loc = {}, angle = {}'.format(loc, angle))
 
         # rotate and set rotation
         waypoints = WAYPOINTS[WAYPOINTS_FOR_STARTING_LOC[loc]]
