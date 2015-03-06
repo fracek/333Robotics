@@ -45,3 +45,9 @@ class LabMap(Map):
     def __init__(self):
         cur_dir = os.path.dirname(os.path.realpath(__file__))
         Map.__init__(self, cur_dir + '/maps/lab.txt')
+
+class ChallengeMap(Map):
+
+    def __init__(self):
+        cur_dir = os.path.dirname(os.path.realpath(__file__))
+        Map.__init__(self, cur_dir + '/maps/challenge.txt')

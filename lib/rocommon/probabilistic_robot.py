@@ -66,10 +66,11 @@ class ProbabilisticRobot(Robot):
             self.update_measurement()
             self.draw_particles()
 
-    def update_measurement(self):
+    def update_measurement(self, angle_offset):
         sonar_value = self.sonar.value()
         if sonar_value:
-            distances = np.array([lh.compute_expected_depth(x, self.map.walls)
+            distances = np.array([lh.compute_expected_depth(x + [0.0, 0.0, angle_offset],
+                                                            self.map.walls)
                                   for x in self.ps.x])
             bad_distances = np.isinf(distances)
             if np.sum(bad_distances) < ProbabilisticRobot.SONAR_READINGS_THRESHOLD:
