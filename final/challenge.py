@@ -101,6 +101,8 @@ if __name__ == "__main__":
 
             robot.move_to_waypoint(wp)
 
+            robot.draw_particles()
+
             robot.sonar.rotate_by(sign * angle_offset)
             robot.update_measurement(angle_offset)
             robot.sonar.rotate_by(- sign * angle_offset)
