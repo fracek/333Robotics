@@ -88,12 +88,13 @@ if __name__ == "__main__":
                     angle_offset = -H_PI
                     sign = -1.0
                 else:
-                    angle_offset = -H_PI
+                    angle_offset = H_PI
+                    sign = -1.0
 
             if wp_coincide(wp, WAYPOINTS[6]):
                 if wp_coincide(prev_wp, WAYPOINTS[7]):
-                    angle_offset = -H_PI
-                    #sign = -1.0
+                    angle_offset = H_PI
+                    sign = -1.0
                 else:
                     angle_offset = -H_PI
                     sign = -1.0
