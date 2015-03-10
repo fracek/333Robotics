@@ -104,6 +104,10 @@ if __name__ == "__main__":
             robot.update_measurement(angle_offset)
             robot.sonar.rotate_by(- sign * angle_offset)
 
+            robot.sonar.rotate_by(- sign * angle_offset)
+            robot.update_measurement(-angle_offset)
+            robot.sonar.rotate_by(sign * angle_offset)
+
             robot.draw_particles()
 
             if wp_coincide(wp, WAYPOINTS[0]) or wp_coincide(wp, WAYPOINTS[1]) or wp_coincide(wp, WAYPOINTS[2]):
