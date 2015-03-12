@@ -123,7 +123,7 @@ class Robot:
     TAU_TO_ANGLE = 36.2
 
     #                angle / distance
-    METER_TO_ANGLE = 60. / 94.0
+    METER_TO_ANGLE = 60. / 96.0
 
     TARGET_SONAR_VALUE = 34
 

@@ -2,6 +2,7 @@ import sys
 sys.path.append('../lib')
 import rocommon
 import numpy as np
+import time
 
 STARTING_POINTS = [[21, 21], [273, 21], [525, 21]]
 WAYPOINTS = np.array([
@@ -87,23 +88,33 @@ if __name__ == "__main__":
                     angle_offset = -H_PI
                     sign = -1.0
                 else:
-                    angle_offset = -H_PI
+                    angle_offset = H_PI
+                    sign = -1.0
 
             if wp_coincide(wp, WAYPOINTS[6]):
                 if wp_coincide(prev_wp, WAYPOINTS[7]):
-                    angle_offset = -H_PI
-                    #sign = -1.0
+                    angle_offset = H_PI
+                    sign = -1.0
                 else:
                     angle_offset = -H_PI
                     sign = -1.0
 
             robot.move_to_waypoint(wp)
 
+            robot.draw_particles()
+
             robot.sonar.rotate_by(sign * angle_offset)
             robot.update_measurement(angle_offset)
             robot.sonar.rotate_by(- sign * angle_offset)
 
+            robot.sonar.rotate_by(- sign * angle_offset)
+            robot.update_measurement(-angle_offset)
+            robot.sonar.rotate_by(sign * angle_offset)
+
             robot.draw_particles()
+
+            if wp_coincide(wp, WAYPOINTS[0]) or wp_coincide(wp, WAYPOINTS[1]) or wp_coincide(wp, WAYPOINTS[2]):
+                time.sleep(1.0)
             prev_wp = wp
     except KeyboardInterrupt:
         pass
